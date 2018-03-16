@@ -1,0 +1,3 @@
+/home/jason/program/small-compiler-master/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/home/jason/program/small-compiler-master/cmake-build-debug/CMakeFiles/edit_cache.dir
+/home/jason/program/small-compiler-master/cmake-build-debug/CMakeFiles/compiler.dir
