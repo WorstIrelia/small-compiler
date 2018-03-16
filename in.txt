@@ -1,0 +1,43 @@
+int foo(int x){
+    while(x>100){
+        x=x+1;
+    }
+    int i;
+    for(;1;){
+        x=x+i;
+        break;
+    }
+    if(x<2) {
+        return 1;
+    }
+    else if(x>10) {
+        return 999;
+    }
+    else {
+        return f(x-1)+f(x-2);
+    }
+
+}
+int fuck(int x,int y){
+    int a=100,b=3,c,d=4,e,f;
+    return x+y-a+b-c+d-e+f;
+}
+int main(){
+    int x;
+    x=10;
+    if(x>100){
+
+    }
+    else if(333){
+
+    }
+    if(1){
+
+    }
+    if(2){
+
+    }
+    int ans;
+    ans=foo(x);
+    return ans;
+}
