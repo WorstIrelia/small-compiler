@@ -1,19 +1,44 @@
+int muti(int x,int y){
+    return x*y;
+}
+int foo(int x,int y);
 int fib(int x){
-    if(x<2){
+    if(x<2) {
         return 1;
     }
-    return f(x-1)+f(x-2);
+    else {
+        return fib(x-1)+fib(x-2);
+    }
 }
 int main(){
-    int x=10;
-    for(int i=0;i<100;i=i+1){
-        x=x*i;
-        x+=i;
-        break;
-        continue;
-        x+=1;
+    int a,b;
+    {
+        int a,b;
+        {
+            int a,b;
+        }
     }
-    int ans=fib(x);
-
-    return ans;
+    if(a>=0){
+        ;;;;;;;;;;;
+    }
+    ;;;;;
+    int sum=0;
+    while(a-=1){
+        ;a+=1;;a+=2;;
+        if(sum&&a){
+            break;
+        }
+        break;
+    }
+    for(int i=1;i<=100;i+=1){
+        sum+=i;
+        continue;
+        int a,b;
+    }
+    long c=123,d=123;
+    foo(muti(a+1,b),foo(fib((a*4)),a+b));
+    fib((a+b)*c/d%(a<<2));
+}
+int foo(int x,int y){
+    return x+y;
 }

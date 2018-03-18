@@ -19,7 +19,11 @@
 #define RSMLBREAKET 11
 #define COMMA 12
 #define SEMICOLON 13
+#define FUNCTION 14
+#define _INT 15
+#define _LONG 16
 int get_next_token();
 int hash(const char *);
 void init();
+int gettype(const char *str);
 #endif //COMPILER_SCANNER_H

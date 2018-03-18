@@ -5,10 +5,11 @@ set(CMAKE_DEPENDS_LANGUAGES
 # The set of files for implicit dependencies of each language:
 set(CMAKE_DEPENDS_CHECK_CXX
   "/home/jason/CLionProjects/compiler/error.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/error.cpp.o"
+  "/home/jason/CLionProjects/compiler/generate.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/generate.cpp.o"
   "/home/jason/CLionProjects/compiler/main.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/main.cpp.o"
   "/home/jason/CLionProjects/compiler/parser.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/parser.cpp.o"
   "/home/jason/CLionProjects/compiler/scanner.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/scanner.cpp.o"
-  "/home/jason/CLionProjects/compiler/cmake-build-debug/semantic.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/semantic.cpp.o"
+  "/home/jason/CLionProjects/compiler/semantic.cpp" "/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/semantic.cpp.o"
   )
 set(CMAKE_CXX_COMPILER_ID "GNU")
 

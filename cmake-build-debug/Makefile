@@ -150,6 +150,33 @@ error.cpp.s:
 	$(MAKE) -f CMakeFiles/compiler.dir/build.make CMakeFiles/compiler.dir/error.cpp.s
 .PHONY : error.cpp.s
 
+generate.o: generate.cpp.o
+
+.PHONY : generate.o
+
+# target to build an object file
+generate.cpp.o:
+	$(MAKE) -f CMakeFiles/compiler.dir/build.make CMakeFiles/compiler.dir/generate.cpp.o
+.PHONY : generate.cpp.o
+
+generate.i: generate.cpp.i
+
+.PHONY : generate.i
+
+# target to preprocess a source file
+generate.cpp.i:
+	$(MAKE) -f CMakeFiles/compiler.dir/build.make CMakeFiles/compiler.dir/generate.cpp.i
+.PHONY : generate.cpp.i
+
+generate.s: generate.cpp.s
+
+.PHONY : generate.s
+
+# target to generate assembly for a file
+generate.cpp.s:
+	$(MAKE) -f CMakeFiles/compiler.dir/build.make CMakeFiles/compiler.dir/generate.cpp.s
+.PHONY : generate.cpp.s
+
 main.o: main.cpp.o
 
 .PHONY : main.o
@@ -270,6 +297,9 @@ help:
 	@echo "... error.o"
 	@echo "... error.i"
 	@echo "... error.s"
+	@echo "... generate.o"
+	@echo "... generate.i"
+	@echo "... generate.s"
 	@echo "... main.o"
 	@echo "... main.i"
 	@echo "... main.s"

@@ -154,17 +154,17 @@ CMakeFiles/compiler.dir/error.cpp.o.provides.build: CMakeFiles/compiler.dir/erro
 
 
 CMakeFiles/compiler.dir/semantic.cpp.o: CMakeFiles/compiler.dir/flags.make
-CMakeFiles/compiler.dir/semantic.cpp.o: semantic.cpp
+CMakeFiles/compiler.dir/semantic.cpp.o: ../semantic.cpp
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/compiler.dir/semantic.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/semantic.cpp.o -c /home/jason/CLionProjects/compiler/cmake-build-debug/semantic.cpp
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/semantic.cpp.o -c /home/jason/CLionProjects/compiler/semantic.cpp
 
 CMakeFiles/compiler.dir/semantic.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/semantic.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/cmake-build-debug/semantic.cpp > CMakeFiles/compiler.dir/semantic.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/semantic.cpp > CMakeFiles/compiler.dir/semantic.cpp.i
 
 CMakeFiles/compiler.dir/semantic.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/semantic.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/cmake-build-debug/semantic.cpp -o CMakeFiles/compiler.dir/semantic.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/semantic.cpp -o CMakeFiles/compiler.dir/semantic.cpp.s
 
 CMakeFiles/compiler.dir/semantic.cpp.o.requires:
 
@@ -177,13 +177,38 @@ CMakeFiles/compiler.dir/semantic.cpp.o.provides: CMakeFiles/compiler.dir/semanti
 CMakeFiles/compiler.dir/semantic.cpp.o.provides.build: CMakeFiles/compiler.dir/semantic.cpp.o
 
 
+CMakeFiles/compiler.dir/generate.cpp.o: CMakeFiles/compiler.dir/flags.make
+CMakeFiles/compiler.dir/generate.cpp.o: ../generate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/compiler.dir/generate.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/generate.cpp.o -c /home/jason/CLionProjects/compiler/generate.cpp
+
+CMakeFiles/compiler.dir/generate.cpp.i: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/generate.cpp.i"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/generate.cpp > CMakeFiles/compiler.dir/generate.cpp.i
+
+CMakeFiles/compiler.dir/generate.cpp.s: cmake_force
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/generate.cpp.s"
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/generate.cpp -o CMakeFiles/compiler.dir/generate.cpp.s
+
+CMakeFiles/compiler.dir/generate.cpp.o.requires:
+
+.PHONY : CMakeFiles/compiler.dir/generate.cpp.o.requires
+
+CMakeFiles/compiler.dir/generate.cpp.o.provides: CMakeFiles/compiler.dir/generate.cpp.o.requires
+	$(MAKE) -f CMakeFiles/compiler.dir/build.make CMakeFiles/compiler.dir/generate.cpp.o.provides.build
+.PHONY : CMakeFiles/compiler.dir/generate.cpp.o.provides
+
+CMakeFiles/compiler.dir/generate.cpp.o.provides.build: CMakeFiles/compiler.dir/generate.cpp.o
+
+
 # Object files for target compiler
 compiler_OBJECTS = \
 "CMakeFiles/compiler.dir/main.cpp.o" \
 "CMakeFiles/compiler.dir/scanner.cpp.o" \
 "CMakeFiles/compiler.dir/parser.cpp.o" \
 "CMakeFiles/compiler.dir/error.cpp.o" \
-"CMakeFiles/compiler.dir/semantic.cpp.o"
+"CMakeFiles/compiler.dir/semantic.cpp.o" \
+"CMakeFiles/compiler.dir/generate.cpp.o"
 
 # External object files for target compiler
 compiler_EXTERNAL_OBJECTS =
@@ -193,9 +218,10 @@ compiler: CMakeFiles/compiler.dir/scanner.cpp.o
 compiler: CMakeFiles/compiler.dir/parser.cpp.o
 compiler: CMakeFiles/compiler.dir/error.cpp.o
 compiler: CMakeFiles/compiler.dir/semantic.cpp.o
+compiler: CMakeFiles/compiler.dir/generate.cpp.o
 compiler: CMakeFiles/compiler.dir/build.make
 compiler: CMakeFiles/compiler.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Linking CXX executable compiler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable compiler"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/compiler.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -208,6 +234,7 @@ CMakeFiles/compiler.dir/requires: CMakeFiles/compiler.dir/scanner.cpp.o.requires
 CMakeFiles/compiler.dir/requires: CMakeFiles/compiler.dir/parser.cpp.o.requires
 CMakeFiles/compiler.dir/requires: CMakeFiles/compiler.dir/error.cpp.o.requires
 CMakeFiles/compiler.dir/requires: CMakeFiles/compiler.dir/semantic.cpp.o.requires
+CMakeFiles/compiler.dir/requires: CMakeFiles/compiler.dir/generate.cpp.o.requires
 
 .PHONY : CMakeFiles/compiler.dir/requires
 

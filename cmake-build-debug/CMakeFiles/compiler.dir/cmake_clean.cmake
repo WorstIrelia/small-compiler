@@ -4,6 +4,7 @@ file(REMOVE_RECURSE
   "CMakeFiles/compiler.dir/parser.cpp.o"
   "CMakeFiles/compiler.dir/error.cpp.o"
   "CMakeFiles/compiler.dir/semantic.cpp.o"
+  "CMakeFiles/compiler.dir/generate.cpp.o"
   "compiler.pdb"
   "compiler"
 )

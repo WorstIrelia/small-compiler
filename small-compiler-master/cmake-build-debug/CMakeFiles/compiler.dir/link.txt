@@ -1,1 +1,0 @@
-/usr/bin/c++  -g   CMakeFiles/compiler.dir/main.cpp.o CMakeFiles/compiler.dir/scanner.cpp.o CMakeFiles/compiler.dir/parser.cpp.o CMakeFiles/compiler.dir/error.cpp.o CMakeFiles/compiler.dir/semantic.cpp.o  -o compiler 

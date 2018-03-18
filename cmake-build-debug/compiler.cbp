@@ -84,16 +84,16 @@
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/jason/CLionProjects/compiler/cmake-build-debug/semantic.cpp">
-			<Option target="compiler"/>
-		</Unit>
-		<Unit filename="/home/jason/CLionProjects/compiler/cmake-build-debug/semantic.h">
-			<Option target="compiler"/>
-		</Unit>
 		<Unit filename="/home/jason/CLionProjects/compiler/error.cpp">
 			<Option target="compiler"/>
 		</Unit>
 		<Unit filename="/home/jason/CLionProjects/compiler/error.h">
+			<Option target="compiler"/>
+		</Unit>
+		<Unit filename="/home/jason/CLionProjects/compiler/generate.cpp">
+			<Option target="compiler"/>
+		</Unit>
+		<Unit filename="/home/jason/CLionProjects/compiler/generate.h">
 			<Option target="compiler"/>
 		</Unit>
 		<Unit filename="/home/jason/CLionProjects/compiler/main.cpp">
@@ -109,6 +109,12 @@
 			<Option target="compiler"/>
 		</Unit>
 		<Unit filename="/home/jason/CLionProjects/compiler/scanner.h">
+			<Option target="compiler"/>
+		</Unit>
+		<Unit filename="/home/jason/CLionProjects/compiler/semantic.cpp">
+			<Option target="compiler"/>
+		</Unit>
+		<Unit filename="/home/jason/CLionProjects/compiler/semantic.h">
 			<Option target="compiler"/>
 		</Unit>
 		<Unit filename="/home/jason/CLionProjects/compiler/CMakeLists.txt">

@@ -4,6 +4,9 @@
 
 #ifndef COMPILER_PARSER_H
 #define COMPILER_PARSER_H
+
+#include "semantic.h"
+
 #define NEXT mark=get_next_token()
 
 
@@ -12,7 +15,8 @@
 //  function->type identifier(argument_list){code_block}
 //  argument_list->type identifier _argument_list|e
 //  _argument_list->, identifier _argument_list|e
-//  code_block->sentence;code_block|for_expr code_block|while_expr code_block|if_expr code_block|ret;code_block|break;code_block|continue;code_block
+//  code_block->sentence;code_block|for_expr code_block|while_expr code_block
+//           |if_expr code_block|ret;code_block|break;code_block|continue;code_block|{code_block}code_block
 //  sentence->expr|statement|e
 
 
@@ -41,7 +45,7 @@
 
 //二元表达式
 void test();
-void expr();
+expr_node* expr();
 void _A();
 void _A_();
 void _B();
@@ -66,45 +70,34 @@ void _K();
 void _K_();
 void _L();
 void _L_();
-void _M();
-void _M_();
-void _N();
-void _N_();
-
-
-
-
-
-
-
-
-
-
-
-
-
+void _M();//node
 
 //
-void S();
-void function();
+void parser();
+void S();//begin
 void C();
-void argument_list();
+void function();//function statement or defination
+void argument_list(std::vector<int>&);//
+void _argument_list(std::vector<int>&);
+
 void code_block();
 void sentence();
+void X(int );
 void statement();
-void equal();
-//void calcu_expr();//没有考虑优先级
-//void _calcu_expr();//
-//void logical_expr();
-void parser();
+void equal(int );
+
+void iden_or_func();
+void func(const char *function_name);
+void real_argument_list(std::vector<int>&);
+void _real_argument_list(std::vector<int>&);
+
+void ret();
 void if_expr();
 void while_expr();
 void for_expr();
-void X();
-void _argument_list();
-void ret();
-void iden_or_func();
-void func();
-void real_argument_list();
-void _real_argument_list();
+
+
+
+
+
 #endif //COMPILER_PARSER_H

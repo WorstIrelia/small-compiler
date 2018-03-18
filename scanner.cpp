@@ -20,6 +20,7 @@ int num;
 
 void init(){
     f[hash("int")]=TYPE;
+    f[hash("long")]=TYPE;
     f[hash("while")]=RESERVER;
     f[hash("for")]=RESERVER;
     f[hash("if")]=RESERVER;
@@ -34,9 +35,9 @@ void init(){
     level[hash("/=")]=1;
     level[hash("&=")]=1;
     level[hash("^=")]=1;
-    level[hash("!=")]=1;
-    level[hash("<<=")]=1;
-    level[hash(">>=")]=1;
+    level[hash("%=")]=1;
+    level[hash("<<=")]=1;//3
+    level[hash(">>=")]=1;//3
     level[hash("||")]=2;
     level[hash("&&")]=3;
     level[hash("|")]=4;
@@ -61,6 +62,14 @@ void init(){
 
 
 }
+int gettype(const char *str){
+    if(!strcmp(str,"int")){
+        return _INT;
+    }
+    else if(!strcmp(str,"long")){
+        return _LONG;
+    }
+}
 int hash(const char *str){//hash一个字符串
     int res=0;
     int len=strlen(str);
@@ -76,12 +85,15 @@ int get_next_token(){//返回下一个词
         NEXT_CHAR;
     }
     if(isdigit(now_char)){
-        str[0]=0;
+        char *p=str;
+        *p=now_char;
         num=now_char-48;
         while(isdigit(next_char)){
             NEXT_CHAR;
+            *(++p)=now_char;
             num=num*10+now_char-48;
         }
+        *(++p)=0;
         std::cout<<num<<std::endl;
         if(isalpha(next_char)){
             error("error in get_next_token");
@@ -106,10 +118,13 @@ int get_next_token(){//返回下一个词
         return EOF;
     }
     str[0]=now_char;
+    //这部分的判断还有问题 不能识别三个字节的符号
     int tmp=str[0]*10007+next_char;
     if(level.count(tmp)){
         str[1]=next_char;
         NEXT_CHAR;
+
+
         str[2]=0;
     }
     else str[1]=0;
@@ -136,3 +151,5 @@ int get_next_token(){//返回下一个词
     }
 
 }
+
+

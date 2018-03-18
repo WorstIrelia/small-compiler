@@ -5,37 +5,44 @@
 #include "scanner.h"
 #include "error.h"
 #include "semantic.h"
+#include "generate.h"
 #include <cstring>
-#include <cstdio>
-#include <unordered_map>
-#include <vector>
 
-std::vector<int>argument_list_v;
+
+
 static int mark;
 extern int num;
 extern char str[];
 extern int domain_cnt;
 extern int function_cnt;
 extern std::unordered_map<int,int> level;
-
+int isloop=0;
 expr_node *root=new expr_node();
 expr_node *current=root;
 
 
-
-void test(){
-    NEXT;
-    //expr();
-}
-void expr(){
+expr_node* expr(){//奇怪
 
     expr_node *tmp=new expr_node;
     node_init(current,tmp);
     current=tmp;
 
     _A();
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
+    printf("%s\n",tmp->retname);
+    current=tmp->father;
 
+    return current;
 }
+void test(){
+    NEXT;
+    printf("im in\n");
+    expr();
+    delete_tmp();
+    printf("success\n");
+}
+
 void _A(){
     expr_node *tmp=new expr_node;
     node_init(current,tmp);
@@ -43,35 +50,41 @@ void _A(){
 
     _B();
 
-    strcpy(tmp->retname,tmp->father->retname);
-
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
     current=tmp;
 
     _A_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _A_(){
     if(level[hash(str)]==1){
-        NEXT;
-        strcpy(current->lname,current->father->retname);
-        strcpy(current->op,str);
 
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
+        strcpy(current->op,str);
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _B();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -80,7 +93,9 @@ void _A_(){
 
         _A_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
+
     }
 }
 void _B(){
@@ -90,7 +105,8 @@ void _B(){
 
     _C();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -98,29 +114,35 @@ void _B(){
     current=tmp;
 
     _B_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _B_(){
     //printf("im in _B_\n");
     if(level[hash(str)]==2){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _C();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -129,7 +151,8 @@ void _B_(){
 
         _B_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _C(){
@@ -139,7 +162,8 @@ void _C(){
 
     _D();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -147,28 +171,34 @@ void _C(){
     current=tmp;
 
     _C_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _C_(){
     if(level[hash(str)]==3){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _D();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -177,7 +207,8 @@ void _C_(){
 
         _C_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _D(){
@@ -187,7 +218,8 @@ void _D(){
 
     _E();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -195,28 +227,34 @@ void _D(){
     current=tmp;
 
     _D_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _D_(){
     if(level[hash(str)]==4){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _E();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -225,7 +263,8 @@ void _D_(){
 
         _D_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _E(){
@@ -236,7 +275,8 @@ void _E(){
 
     _F();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -244,28 +284,34 @@ void _E(){
     current=tmp;
 
     _E_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _E_(){
     if(level[hash(str)]==5){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _F();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -274,7 +320,8 @@ void _E_(){
 
         _E_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _F(){
@@ -284,7 +331,8 @@ void _F(){
 
     _G();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -292,28 +340,34 @@ void _F(){
     current=tmp;
 
     _F_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _F_(){
     if(level[hash(str)]==6){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _G();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -322,7 +376,8 @@ void _F_(){
 
         _F_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _G(){
@@ -332,35 +387,43 @@ void _G(){
 
     _H();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
     current=tmp;
     _G_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _G_(){
     if(level[hash(str)]==7){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _H();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -369,7 +432,8 @@ void _G_(){
 
         _G_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _H(){
@@ -379,7 +443,8 @@ void _H(){
 
     _I();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -387,28 +452,35 @@ void _H(){
     current=tmp;
 
     _H_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _H_(){
     if(level[hash(str)]==8){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _I();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -417,7 +489,8 @@ void _H_(){
 
         _H_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _I(){
@@ -427,7 +500,8 @@ void _I(){
 
     _J();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -435,28 +509,35 @@ void _I(){
     current=tmp;
 
     _I_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _I_(){
     if(level[hash(str)]==9){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _J();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -465,7 +546,8 @@ void _I_(){
 
         _I_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _J(){
@@ -475,7 +557,8 @@ void _J(){
 
     _K();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -483,28 +566,35 @@ void _J(){
     current=tmp;
 
     _J_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _J_(){
     if(level[hash(str)]==10){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _K();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -512,7 +602,8 @@ void _J_(){
         current=tmp1;
         _J_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _K(){
@@ -522,7 +613,8 @@ void _K(){
 
     _L();
 
-    strcpy(tmp->retname,tmp->father->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
     tmp=new expr_node;
@@ -530,29 +622,36 @@ void _K(){
     current=tmp;
 
     _K_();
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
 }
 void _K_(){
     //printf("im in _k_\n");
     if(level[hash(str)]==11){
-        NEXT;
 
-        strcpy(current->lname,current->father->retname);
+
+        current->lname=current->father->retname;
+
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
-
+        NEXT;
         expr_node *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _L();
 
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
-
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -561,7 +660,8 @@ void _K_(){
 
         _K_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
     }
 }
 void _L(){
@@ -572,7 +672,10 @@ void _L(){
     _M();
 
 
-    strcpy(tmp->retname,tmp->father->retname);
+    //printf("test %s\n",tmp->retname);
+    tmp->father->retname=tmp->retname;
+    tmp->father->rettype=tmp->rettype;
+    //printf("father test %s\n",tmp->father->retname);
 
     current=tmp->father;
     tmp=new expr_node;
@@ -582,28 +685,36 @@ void _L(){
     _L_();
 
 
-    strcpy(tmp->retname,tmp->father->retname);
+    if(tmp->retname) {
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+    }
+    current=tmp->father;
+    //printf("father test2 %s\n",tmp->father->retname);
 }
 void _L_(){
     //printf("im in _L_\n");
     if(level[hash(str)]==12){
-        NEXT;
-
-        strcpy(current->lname,current->father->retname);
+        current->lname=current->father->retname;
+        current->ltype=current->father->rettype;
         strcpy(current->op,str);
 
-        expr_node *tmp1=new expr_node;
+        NEXT;
+
+        auto *tmp1=new expr_node;
         node_init(current,tmp1);
         current=tmp1;
 
         _M();
-        strcpy(tmp1->father->rname,tmp1->retname);
-        strcpy(tmp1->father->retname,"tmp");
 
+        tmp1->father->rname=tmp1->retname;
+        tmp1->father->retname=next_tmp();
 
+        tmp1->father->rtype=tmp1->rettype;
+        tmp1->father->rettype=tmp1->father->ltype;
 
         current=tmp1->father;
-        printf("tmp %s %s %s\n",current->lname,current->op,current->rname);
+        if(type_judge(current->ltype,current->rtype,current->op)) gene_two_op(current->lname,current->rname,current->op,current->retname);
 
 
         tmp1=new expr_node;
@@ -612,13 +723,14 @@ void _L_(){
 
         _L_();
 
-        strcpy(tmp1->retname,tmp1->father->retname);
+        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        current=tmp1->father;
+
+
     }
 }
 
-void _M(){
-    //printf("im in\n");
-    //printf("%s\n",str);
+void _M(){//分析是函数还是变量
     if(!strcmp(str,"(")){
         NEXT;
 
@@ -627,29 +739,27 @@ void _M(){
         current=tmp;
 
         _A();
+
+        tmp->father->retname=tmp->retname;
+        tmp->father->rettype=tmp->rettype;
+        current=tmp->father;
         if(!strcmp(str,")")){
             NEXT;
         }
         else error("in M");
     }
     else if(mark==NUM){
-        //printf("im in mark\n");
 
         current->rettype=NUM;
-        current->istmp=0;
-        current->name[0]='n';
-        current->name[1]=0;
+        current->retname=(char *)malloc(128);
+        strcpy(current->retname,str);//换成数字的string
 
         NEXT;
     }
     else {
-
-        current->rettype=NUM;
-        current->istmp=0;
-        strcpy(current->name,str);//默认是标识符
-
-        NEXT;//默认是标识符
-        //iden_or_func();
+        current->retname=(char *)malloc(128);
+        strcpy(current->retname,str);
+        iden_or_func();
     }
 }
 
@@ -663,12 +773,10 @@ void _M(){
 
 void parser(){
     NEXT;
-    //printf("???\n");
     S();
     printf("success\n");
 }
 void S(){
-    //printf("im in\n");
     if(mark==TYPE){
         function();
         C();
@@ -677,52 +785,98 @@ void S(){
         error("error in S()\n");
     }
 }
-void function(){
-    //printf("im in\n");
+void C(){
+    //printf("CCCC\n");
+    if(mark==EOF){
+        return;
+    }
+    else if(mark==TYPE){
+        S();
+    }
+    else error("in C,expect type\n");
+}
 
-    //fucntion analize
+void _argument_list(std::vector<int> &argument_list_v){
+    if(mark==COMMA){
+        NEXT;
+        if(mark==TYPE){
+            int tmptype=gettype(str);
+            argument_list_v.push_back(tmptype);
+            NEXT;
+            if(mark==IDENTIFIER){
+                add_identifer(str,tmptype,function_cnt,domain_cnt);
+                NEXT;
+                _argument_list(argument_list_v);
+            }
+            else error("in _arguement_list\n");
+        }
+
+    }
+    else if(mark==RSMLBREAKET) return ;
+    else error("in _arguement_list\n");
+}
+void argument_list(std::vector<int> &argument_list_v){
+    if(mark==TYPE){
+        int tmptype=gettype(str);
+        argument_list_v.push_back(gettype(str));
+        printf("size %lu\n",argument_list_v.size());
+        NEXT;
+        if(mark==IDENTIFIER){
+            add_identifer(str,tmptype,function_cnt,domain_cnt);
+            NEXT;
+            if(mark==COMMA) {
+                _argument_list(argument_list_v);
+            }
+            else if(mark==RSMLBREAKET) return;
+            else error("in arguement_list,expect ,\n");
+        }
+        else error("in arguement_list,expect identifier\n");
+    }
+    else if(mark==RSMLBREAKET) return;
+    else error("in arguement_list,expect type or )\n");
+}
+void function(){
     int type;
     char name[128];
     if(mark==TYPE){
-        type=TYPE;
+        type=gettype(str);
         NEXT;
         if(mark==IDENTIFIER) {
             strcpy(name,str);
             NEXT;
             if (mark == LSMLBREAKET) {
                 NEXT;
-
+                function_cnt++;
+                domain_cnt=0;
+                std::vector<int>argument_list_v;
                 argument_list_v.clear();
-
-                argument_list();
+                argument_list(argument_list_v);//得到参数信息
                 if (mark == RSMLBREAKET) {
                     NEXT;
-                    if (mark == LBIGBRACKET) {
-                        if(in_function(name)){
-                            if(!is_same_function(name,type,argument_list_v))
-                                error("chongdingyi");
+                    if (mark == LBIGBRACKET) {//定义函数
+                        if(in_function_list(name)){//如果声明过 要求参数相等 而且没定义
+                            if(!function_judge(name,argument_list_v)) {
+                                printf("error in funciont %s\n",name);
+                                error("");
+                            }
                         }
-                        add_function(name,type,argument_list_v,1,0);
-
-                        function_cnt++;
-
+                        add_function(name,type,argument_list_v,1,0);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
                         NEXT;
                         code_block();
                         if (mark == RBIGBRACKET) {
+                            gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
                             NEXT;
                             return;
                         }
                         else error("in function,expect }\n");
                     }
-                    else if(mark==SEMICOLON){
-
-
-                        if(in_function(name)){
-                            error("chongdingyi");
+                    else if(mark==SEMICOLON){//这只是个函数声明
+                        if(in_function_list(name)){
+                            printf("function %s ",name);
+                            error("redefine");
                         }
                         add_function(name,type,argument_list_v,0,0);
                         NEXT;
-
                     }
                     else error("in function,expect {\n");
                 }
@@ -734,154 +888,10 @@ void function(){
     }
     else error("in function,expect type\n");
 }
-void _argument_list(){
-    if(mark==COMMA){
-        NEXT;
-        if(mark==TYPE){
-            argument_list_v.push_back();
-            NEXT;
-            if(mark==IDENTIFIER){
-                NEXT;
-                _argument_list();
-            }
-            else error("in _arguement_list\n");
-        }
 
-    }
-    else if(mark==RSMLBREAKET) return ;
-    else error("in _arguement_list\n");
-}
-void argument_list(){
-    if(mark==TYPE){
-        argument_list_v.push_back();
-        NEXT;
-        if(mark==IDENTIFIER){
-            NEXT;
-            if(mark==COMMA) {
-                _argument_list();
-            }
-            else if(mark==RSMLBREAKET) return;
-            else error("in arguement_list,expect ,\n");
-        }
-        else error("in arguement_list,expect identifier\n");
-    }
-    else if(mark==RSMLBREAKET) return;
-    else error("in arguement_list,expect type or )\n");
-}
-void sentence(){
-    if(mark==TYPE){
-        statement();
-    }
-    else if(mark==IDENTIFIER){
-        expr();
-    }
-    else error("in sentence\n");
-}
-void statement(){
-    char name[128];
-    int type;
-    if(mark==TYPE){
-        type=TYPE;
-        NEXT;
-        if(mark==IDENTIFIER){
-            strcpy(name,str);
-
-            add(str,type,function_cnt,domain_cnt);
-
-            NEXT;
-            equal();
-            X();
-        }
-        else error("in statement,expect identifier\n");
-    }
-    else error("in statement,expect type\n");
-}
-void X(){
-    if(mark==COMMA){
-        NEXT;
-        if(mark==IDENTIFIER){
-            add(str,gettype,function_cnt,domain_cnt);
-            NEXT;
-            equal();
-            X();
-        }
-        else error("in X,expect identifier\n");
-    }
-    else if(mark==SEMICOLON) return;
-    else error("in X,expect , or ;\n");
-}
-void ret(){
-    if(!strcmp(str,"return")){
-        NEXT;
-        if(mark==IDENTIFIER||mark==NUM){
-            expr();
-        }
-        else if(mark==SEMICOLON) return;
-        else error("in return");
-    }
-    else error("in return");
-}
-//void calcu_expr(){
-//    if(mark==NUM||mark==IDENTIFIER){
-//        if(mark==IDENTIFIER){
-//            iden_or_func();
-//        }
-//        else if(mark==NUM){
-//            NEXT;
-//        }
-//        if(mark=='+'||mark=='-'){
-//            _calcu_expr();
-//        }
-//        else if(mark=='<'||mark=='>'||mark==';'||mark==')') return ;
-//
-//        else error("in calcu_expr\n");
-//    }
-//    else error("in calcu_expr,expect identifier or number\n");
-//}
-//void _calcu_expr(){
-//    if(mark=='+'||mark=='-'){
-//        NEXT;
-//        if(mark==IDENTIFIER||mark==NUM){
-//            if(mark==IDENTIFIER){
-//                iden_or_func();
-//            }
-//            else if(mark==NUM){
-//
-//                NEXT;
-//            }
-//            _calcu_expr();
-//        }
-//        else error("in _calcu_expr");
-//    }
-//    else if(mark==';'||mark==')') return ;
-//    else error("in _calcu_expr,expect operator or ;\n");
-//}
-//void logical_expr(){
-//    if(mark==IDENTIFIER||mark==NUM){
-//        //printf("im in\n");
-//        calcu_expr();
-//        if(mark=='<'||mark=='>'){
-//            NEXT;
-//            //printf("im in");
-//            if(mark==IDENTIFIER||mark==NUM){
-//
-//                calcu_expr();
-//            }
-//            else error("in logical_expr,expect identifier\n");
-//        }
-//        else error("in logical_expr,expect < or >\n");
-//    }
-//    else error("in logical_expr,expect identifier\n");
-//}
-void equal(){
-    if(!strcmp(str,"=")){
-        NEXT;
-        expr();
-    }
-    else return ;
-}
 void code_block(){
-    if(mark==TYPE||mark==IDENTIFIER){
+    //printf("im in\n");
+    if(mark==TYPE||mark==IDENTIFIER||mark==SEMICOLON||mark==LSMLBREAKET){
         sentence();
         if(mark==SEMICOLON){
             NEXT;
@@ -897,18 +907,26 @@ void code_block(){
             }
         }
         if(!strcmp(str,"for")){
+            isloop++;
             for_expr();
+            isloop--;
+            printf("sadfasdf  %d \n",isloop);
             code_block();
         }
         else if(!strcmp(str,"while")){
+            isloop++;
             while_expr();
+            isloop--;
             code_block();
         }
         else if(!strcmp(str,"if")){
+
             if_expr();
             code_block();
         }
         else if(!strcmp(str,"continue")||!strcmp(str,"break")){
+            printf("isloop = %d\n",isloop);
+            if(!isloop) error("no loop");
             NEXT;
             if(mark==SEMICOLON){
                 NEXT;
@@ -916,50 +934,97 @@ void code_block(){
             }
         }
     }
-    else if(mark==RBIGBRACKET) return ;
-    else error("in code_blocks,expect ;\n");
-}
-void C(){
-    //printf("CCCC\n");
-    if(mark==EOF){
-        return;
+    else if(mark==LBIGBRACKET) {
+        NEXT;
+        domain_cnt++;
+        code_block();
+        gene_del(function_cnt,domain_cnt);
+        domain_cnt--;
+        if(mark==RBIGBRACKET){
+            NEXT;
+            code_block();
+        }
+        else error("expect }");
     }
-    else if(mark==TYPE){
-        S();
-    }
-    else error("in C,expect type\n");
 }
-void real_argument_list(){
-    if(mark==RSMLBREAKET) return;
-    else if(mark==IDENTIFIER||mark==NUM){
+void sentence(){
+    if(mark==TYPE){
+        statement();
+    }
+    else if(mark==IDENTIFIER||mark==LSMLBREAKET){
+        //printf("im in aaaaaaaaaa\n");
         expr();
-        _real_argument_list();
+        delete_tmp();
     }
-//    else if(mark==IDENTIFIER||mark==NUM){
-//        calcu_expr();
-//        _real_argument_list();
-//    }
 }
-void _real_argument_list(){
-//    if(mark==','){
-//        calcu_expr();
-//        _real_argument_list();
-//    }
+void equal(int type){
+    if(!strcmp(str,"=")){
+        NEXT;
+        type_judge(type,expr()->rettype,"=");
+    }
+}//judge
+void X(int type){
     if(mark==COMMA){
         NEXT;
-        //calcu_expr();
-        expr();
-        _real_argument_list();
+        if(mark==IDENTIFIER){
+            add_identifer(str,type,function_cnt,domain_cnt);
+            NEXT;
+            equal(type);//类型匹配
+            X(type);
+        }
+        else error("in X,expect identifier\n");
     }
-    else if(mark==RSMLBREAKET) return ;
+    else if(mark==SEMICOLON) return;
+    else error("in X,expect , or ;\n");
+}
+
+void statement(){
+    int type;
+    if(mark==TYPE){
+        type=gettype(str);//获取变量类型
+        NEXT;
+        if(mark==IDENTIFIER){
+            add_identifer(str,type,function_cnt,domain_cnt);
+            NEXT;
+            equal(type);//类型匹配
+            X(type);
+        }
+        else error("in statement,expect identifier\n");
+    }
+    else error("in statement,expect type\n");
+    delete_tmp();
+}
+
+
+
+
+void _real_argument_list(std::vector<int> &real_argument_list_v){
+    if(mark==COMMA){
+        NEXT;
+        real_argument_list_v.push_back(expr()->rettype);
+        _real_argument_list(real_argument_list_v);
+    }
+    else if(mark==RSMLBREAKET) {
+        return ;
+    }
     else error("in _real_argument_list");
 }
-void func(){
+void real_argument_list(std::vector<int> &real_argument_list_v){
+    if(mark==RSMLBREAKET) return;
+    real_argument_list_v.push_back(expr()->rettype);
+    _real_argument_list(real_argument_list_v);
+}
+void func(const char *function_name){
     if(mark==LSMLBREAKET){
         NEXT;
-        //printf("im in func\n");
-        real_argument_list();//
+        std::vector<int> real_argument_list_v;
+        real_argument_list_v.clear();
+        real_argument_list(real_argument_list_v);//得到实参表
         if(mark==RSMLBREAKET){
+            if(function_argument_judge(function_name,real_argument_list_v)){
+                function_use(function_name);
+            }
+            else error("arguments don't match");
             NEXT;
             return;
         }
@@ -967,43 +1032,83 @@ void func(){
     }
     else error("in func");
 }
+
 void iden_or_func(){
-    //printf("im in\n");
     if(mark==IDENTIFIER){
         NEXT;
-        //printf("im in aaaaa\n");
         if(mark==LSMLBREAKET){
-            func();
+            if(!in_function_list(current->retname)) {
+                printf("%s ",current->retname);
+                error("not statement");
+            }
+            char *function_name=(char *)malloc(128);
+            strcpy(function_name,current->retname);
+            func(function_name);
+
+            current->rettype=get_function_type(function_name);//函数的返回值类型 修改
+            char *p=next_tmp();
+
+            gene_function(function_name,p);
+            current->retname=p;
+            free(function_name);
             return ;
         }
-        else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA) return;//右边小括号 还有别的情况
+        else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA) {
+
+            if(!in_symbol_list(current->retname,function_cnt,domain_cnt)) {
+                printf("%s ",current->retname);
+                error("not define");
+            }
+            current->rettype=get_identifer_type(current->retname);
+            return ;//默认是标识符
+        }
         else error("in iden_or_func");
     }
     else error("in iden_or_func");
+}//生成call函数代码
+void ret(){
+    if(!strcmp(str,"return")){
+        NEXT;
+        if(mark==IDENTIFIER||mark==NUM){
+            expr();
+            delete_tmp();
+        }
+        else if(mark==SEMICOLON) return;
+        else error("in return");
+    }
+    else error("in return");
 }
 void for_expr(){
+    domain_cnt++;
     if(!strcmp(str,"for")){
         NEXT;
         if(mark==LSMLBREAKET){
             NEXT;
             if(mark==IDENTIFIER||mark==TYPE) {
-                if(mark==IDENTIFIER) expr();
+                if(mark==IDENTIFIER) {
+                    expr();
+                    delete_tmp();
+                }
                 else statement();
                 if(mark==SEMICOLON){
                     NEXT;
                     expr();
+                    delete_tmp();
                     if(mark==SEMICOLON){
                         NEXT;
                         if(mark==IDENTIFIER){
                             expr();
+                            delete_tmp();
                             if(mark==RSMLBREAKET){
                                 NEXT;
                                 if(mark==LBIGBRACKET) {
                                     NEXT;
                                     code_block();
                                     if(mark==RBIGBRACKET){
+                                        gene_del(function_cnt,domain_cnt);
+                                        domain_cnt--;
+
                                         NEXT;
-                                        code_block();
                                     }
                                     else error("in for...\n");
                                 }
@@ -1017,8 +1122,9 @@ void for_expr(){
                                 NEXT;
                                 code_block();
                                 if(mark==RBIGBRACKET){
+                                    gene_del(function_cnt,domain_cnt);
+                                    domain_cnt--;
                                     NEXT;
-                                    code_block();
                                 }
                                 else error("in for...\n");
                             }
@@ -1033,18 +1139,22 @@ void for_expr(){
             else if(mark==SEMICOLON){
                 NEXT;
                 expr();
+                delete_tmp();
                 if(mark==SEMICOLON){
                     NEXT;
                     if(mark==IDENTIFIER){
                         expr();
+                        delete_tmp();
                         if(mark==RSMLBREAKET){
                             NEXT;
                             if(mark==LBIGBRACKET) {
                                 NEXT;
                                 code_block();
                                 if(mark==RBIGBRACKET){
+                                    gene_del(function_cnt,domain_cnt);
+                                    domain_cnt--;
                                     NEXT;
-                                    code_block();
+
                                 }
                                 else error("in for...\n");
                             }
@@ -1058,8 +1168,9 @@ void for_expr(){
                             NEXT;
                             code_block();
                             if(mark==RBIGBRACKET){
+                                gene_del(function_cnt,domain_cnt);
+                                domain_cnt--;
                                 NEXT;
-                                code_block();
                             }
                             else error("in for...\n");
                         }
@@ -1077,20 +1188,22 @@ void for_expr(){
     else error("in for...\n");
 }
 void while_expr(){
+    domain_cnt++;
     if(!strcmp(str,"while")){
         NEXT;
         if(mark==LSMLBREAKET){
             NEXT;
             expr();
+            delete_tmp();
             if(mark==RSMLBREAKET){
                 NEXT;
                 if(mark==LBIGBRACKET){
-
                     NEXT;
                     code_block();
                     if(mark==RBIGBRACKET){
+                        gene_del(function_cnt,domain_cnt);
+                        domain_cnt--;
                         NEXT;
-                        code_block();
                     }
                     else error("in while\n");
                 }
@@ -1103,18 +1216,25 @@ void while_expr(){
     else error("in while\n");
 }
 void if_expr(){
+    domain_cnt++;
     if(!strcmp(str,"if")){
         NEXT;
         if(mark==LSMLBREAKET){
             NEXT;
             expr();
+            delete_tmp();
             if(mark==RSMLBREAKET){
+
                 NEXT;
                 if(mark==LBIGBRACKET){
+                    printf("ok\n");
+
                     NEXT;
-                    //printf("im in\n");
+                    printf("im in\n");
                     code_block();
                     if(mark==RBIGBRACKET){
+                        gene_del(function_cnt,domain_cnt);
+                        domain_cnt--;
                         NEXT;
                         if(!strcmp(str,"else")){
                             NEXT;
@@ -1122,9 +1242,13 @@ void if_expr(){
                                 if_expr();
                             }
                             else if(mark==LBIGBRACKET){
+
+                                domain_cnt++;
                                 NEXT;
                                 code_block();
                                 if(mark==RBIGBRACKET){
+                                    gene_del(function_cnt,domain_cnt);
+                                    domain_cnt--;
                                     NEXT;
                                     return ;
                                 }
