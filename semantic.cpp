@@ -132,6 +132,7 @@ int get_identifer_type(const char *str){
     return tmpv[tmpv.size()-1].type;
 }
 void node_init(expr_node* father,expr_node *son){
+
     father->v.push_back(son);
     son->father=father;
 }

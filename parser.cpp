@@ -7,15 +7,18 @@
 #include "semantic.h"
 #include "generate.h"
 #include <cstring>
-
+#include <stack>
 
 
 static int mark;
+extern int instruction_cnt;
 extern int num;
 extern char str[];
 extern int domain_cnt;
 extern int function_cnt;
 extern std::unordered_map<int,int> level;
+extern std::stack<loop *>loop_stack;
+extern std::stack<_if *>if_stack;
 int isloop=0;
 expr_node *root=new expr_node();
 expr_node *current=root;
@@ -332,6 +335,7 @@ void _F(){
     _G();
 
     tmp->father->retname=tmp->retname;
+    printf("%s test return name\n",tmp->retname);
     tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
@@ -342,6 +346,7 @@ void _F(){
     _F_();
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
+        printf("%s test return name\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -389,7 +394,7 @@ void _G(){
 
     tmp->father->retname=tmp->retname;
     tmp->father->rettype=tmp->rettype;
-
+    printf("%s test return name\n",tmp->retname);
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
@@ -397,6 +402,7 @@ void _G(){
     _G_();
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
+        printf("%s test return name\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -445,15 +451,17 @@ void _H(){
 
     tmp->father->retname=tmp->retname;
     tmp->father->rettype=tmp->rettype;
-
+    printf("%s test return name\n",tmp->retname);
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
     current=tmp;
 
     _H_();
+    printf("im in\n");
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
+        printf("%s test return name fffffffffff\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -475,7 +483,8 @@ void _H_(){
 
         tmp1->father->rname=tmp1->retname;
         tmp1->father->retname=next_tmp();
-
+        printf("okok\n");
+        printf("%s test return name\n",tmp1->father->retname);
         tmp1->father->rtype=tmp1->rettype;
         tmp1->father->rettype=tmp1->father->ltype;
 
@@ -488,8 +497,13 @@ void _H_(){
         current=tmp1;
 
         _H_();
-
-        if(tmp1->retname) tmp1->father->retname=tmp1->retname;
+        printf("%s test return namehhhhhh\n",tmp1->father->retname);
+        printf("%p dddddddddd\n",tmp1->retname);
+        if(tmp1->retname) {
+            tmp1->father->retname=tmp1->retname;
+            printf("%s test return name\n",tmp1->father->retname);
+        }
+        printf("im out\n");
         current=tmp1->father;
     }
 }
@@ -805,6 +819,7 @@ void _argument_list(std::vector<int> &argument_list_v){
             NEXT;
             if(mark==IDENTIFIER){
                 add_identifer(str,tmptype,function_cnt,domain_cnt);
+                gene_lea(str,(argument_list_v.size()-1)*8);
                 NEXT;
                 _argument_list(argument_list_v);
             }
@@ -819,10 +834,11 @@ void argument_list(std::vector<int> &argument_list_v){
     if(mark==TYPE){
         int tmptype=gettype(str);
         argument_list_v.push_back(gettype(str));
-        printf("size %lu\n",argument_list_v.size());
+        //printf("size %lu\n",argument_list_v.size());
         NEXT;
         if(mark==IDENTIFIER){
             add_identifer(str,tmptype,function_cnt,domain_cnt);
+            gene_lea(str,0);
             NEXT;
             if(mark==COMMA) {
                 _argument_list(argument_list_v);
@@ -889,64 +905,7 @@ void function(){
     else error("in function,expect type\n");
 }
 
-void code_block(){
-    //printf("im in\n");
-    if(mark==TYPE||mark==IDENTIFIER||mark==SEMICOLON||mark==LSMLBREAKET){
-        sentence();
-        if(mark==SEMICOLON){
-            NEXT;
-            code_block();
-        }
-    }
-    else if(mark==RESERVER){
-        if(!strcmp(str,"return")){
-            ret();
-            if(mark==SEMICOLON){
-                NEXT;
-                code_block();
-            }
-        }
-        if(!strcmp(str,"for")){
-            isloop++;
-            for_expr();
-            isloop--;
-            printf("sadfasdf  %d \n",isloop);
-            code_block();
-        }
-        else if(!strcmp(str,"while")){
-            isloop++;
-            while_expr();
-            isloop--;
-            code_block();
-        }
-        else if(!strcmp(str,"if")){
 
-            if_expr();
-            code_block();
-        }
-        else if(!strcmp(str,"continue")||!strcmp(str,"break")){
-            printf("isloop = %d\n",isloop);
-            if(!isloop) error("no loop");
-            NEXT;
-            if(mark==SEMICOLON){
-                NEXT;
-                code_block();
-            }
-        }
-    }
-    else if(mark==LBIGBRACKET) {
-        NEXT;
-        domain_cnt++;
-        code_block();
-        gene_del(function_cnt,domain_cnt);
-        domain_cnt--;
-        if(mark==RBIGBRACKET){
-            NEXT;
-            code_block();
-        }
-        else error("expect }");
-    }
-}
 void sentence(){
     if(mark==TYPE){
         statement();
@@ -957,19 +916,26 @@ void sentence(){
         delete_tmp();
     }
 }
-void equal(int type){
+void equal(int type,const char *tmpstr){
+    //printf("im in\n");
     if(!strcmp(str,"=")){
         NEXT;
-        type_judge(type,expr()->rettype,"=");
+        auto p=expr();
+        type_judge(type,p->rettype,"=");
+        gene_two_op(tmpstr,p->retname,"=",NULL);
+        delete_tmp();
     }
 }//judge
 void X(int type){
     if(mark==COMMA){
         NEXT;
         if(mark==IDENTIFIER){
+            char tmpstr[128];
+            strcpy(tmpstr,str);
             add_identifer(str,type,function_cnt,domain_cnt);
+            gene_add(str);
             NEXT;
-            equal(type);//类型匹配
+            equal(type,tmpstr);//类型匹配
             X(type);
         }
         else error("in X,expect identifier\n");
@@ -984,9 +950,12 @@ void statement(){
         type=gettype(str);//获取变量类型
         NEXT;
         if(mark==IDENTIFIER){
+            char tmpstr[128];
+            strcpy(tmpstr,str);
             add_identifer(str,type,function_cnt,domain_cnt);
+            gene_add(str);
             NEXT;
-            equal(type);//类型匹配
+            equal(type,tmpstr);//类型匹配
             X(type);
         }
         else error("in statement,expect identifier\n");
@@ -1001,7 +970,9 @@ void statement(){
 void _real_argument_list(std::vector<int> &real_argument_list_v){
     if(mark==COMMA){
         NEXT;
-        real_argument_list_v.push_back(expr()->rettype);
+        auto p=expr();
+        real_argument_list_v.push_back(p->rettype);
+        gene_real_argument(p->retname);
         _real_argument_list(real_argument_list_v);
     }
     else if(mark==RSMLBREAKET) {
@@ -1011,7 +982,9 @@ void _real_argument_list(std::vector<int> &real_argument_list_v){
 }
 void real_argument_list(std::vector<int> &real_argument_list_v){
     if(mark==RSMLBREAKET) return;
-    real_argument_list_v.push_back(expr()->rettype);
+    auto p=expr();
+    real_argument_list_v.push_back(p->rettype);
+    gene_real_argument(p->retname);
     _real_argument_list(real_argument_list_v);
 }
 void func(const char *function_name){
@@ -1043,12 +1016,14 @@ void iden_or_func(){
             }
             char *function_name=(char *)malloc(128);
             strcpy(function_name,current->retname);
+            gene_call_begin();
             func(function_name);
 
             current->rettype=get_function_type(function_name);//函数的返回值类型 修改
             char *p=next_tmp();
+            gene_call_end(function_name,p);
 
-            gene_function(function_name,p);
+            //gene_function(function_name,p);
             current->retname=p;
             free(function_name);
             return ;
@@ -1066,14 +1041,89 @@ void iden_or_func(){
     }
     else error("in iden_or_func");
 }//生成call函数代码
+void if_expr(_if *tmp){
+    domain_cnt++;
+    if(!strcmp(str,"if")){
+        NEXT;
+        if(mark==LSMLBREAKET){
+            NEXT;
+            tmp->begin.push_back(instruction_cnt);
+            gene_head_if(expr()->retname,tmp);
+            delete_tmp();
+            if(mark==RSMLBREAKET){
+
+                NEXT;
+                if(mark==LBIGBRACKET){
+                    printf("ok\n");
+
+                    NEXT;
+                    printf("im in\n");
+                    if_stack.push(tmp);
+                    code_block();
+                    if(mark==RBIGBRACKET){
+                        //gene_del(function_cnt,domain_cnt);
+                        domain_cnt--;
+                        NEXT;
+                        if(!strcmp(str,"else")){
+                            NEXT;
+                            if(!strcmp(str,"if")){
+                                tmp=if_stack.top();
+                                gene_tail_if(tmp);
+
+                                if_stack.pop();
+                                if_expr(tmp);
+                            }
+                            else if(mark==LBIGBRACKET){
+                                gene_tail_if(tmp);
+                                tmp=if_stack.top();
+                                tmp->begin.push_back(instruction_cnt);
+                                domain_cnt++;
+                                NEXT;
+                                code_block();
+
+                                if(mark==RBIGBRACKET){
+                                    tmp=if_stack.top();
+
+                                    gene_end_if(tmp);
+                                    if_stack.pop();
+                                    delete(tmp);
+                                    //gene_del(function_cnt,domain_cnt);
+                                    domain_cnt--;
+                                    NEXT;
+                                    return ;
+                                }
+                                else error("in if_expr\n");
+                            }
+                            else error("in if_expr\n");
+                        }
+                        else{
+                            tmp=if_stack.top();
+                            gene_end_if(tmp);
+                            if_stack.pop();
+                            delete(tmp);
+                        }
+                    }
+                    else error("in if_expr\n");
+                }
+                else error("in if_expr\n");
+            }
+            else error("in if_expr\n");
+        }
+        else error("in if_expr\n");
+    }
+}
 void ret(){
     if(!strcmp(str,"return")){
         NEXT;
         if(mark==IDENTIFIER||mark==NUM){
-            expr();
+
+            gene_return(expr()->retname);
             delete_tmp();
         }
-        else if(mark==SEMICOLON) return;
+        else if(mark==SEMICOLON)
+        {
+            gene_return(NULL);
+        }
         else error("in return");
     }
     else error("in return");
@@ -1084,28 +1134,35 @@ void for_expr(){
         NEXT;
         if(mark==LSMLBREAKET){
             NEXT;
-            if(mark==IDENTIFIER||mark==TYPE) {
-                if(mark==IDENTIFIER) {
-                    expr();
-                    delete_tmp();
-                }
-                else statement();
+            if(mark==IDENTIFIER||mark==TYPE||mark==SEMICOLON) {
+                sentence();
                 if(mark==SEMICOLON){
                     NEXT;
-                    expr();
+                    _for *tmp=new _for;
+                    tmp->type=FOR;
+                    tmp->begin=instruction_cnt;
+                    gene_head_for(expr()->retname,tmp);
                     delete_tmp();
                     if(mark==SEMICOLON){
                         NEXT;
                         if(mark==IDENTIFIER){
+                            tmp->expr3=instruction_cnt;
                             expr();
+                            gene_mid_for(tmp);
                             delete_tmp();
                             if(mark==RSMLBREAKET){
                                 NEXT;
                                 if(mark==LBIGBRACKET) {
                                     NEXT;
+                                    loop_stack.push((loop*)tmp);
                                     code_block();
                                     if(mark==RBIGBRACKET){
-                                        gene_del(function_cnt,domain_cnt);
+
+                                        tmp=(_for*)loop_stack.top();
+                                        gene_tail_for(tmp);
+                                        delete tmp;
+                                        loop_stack.pop();
+
                                         domain_cnt--;
 
                                         NEXT;
@@ -1117,6 +1174,8 @@ void for_expr(){
                             else error("in for...\n");
                         }
                         else if(mark==LSMLBREAKET){
+                            tmp->expr3=instruction_cnt;
+                            gene_mid_for(tmp);
                             NEXT;
                             if(mark==LBIGBRACKET) {
                                 NEXT;
@@ -1127,50 +1186,6 @@ void for_expr(){
                                     NEXT;
                                 }
                                 else error("in for...\n");
-                            }
-                            else error("in for...\n");
-                        }
-                        else error("in for...\n");
-                    }
-                    else error("in for...\n");
-                }
-                else error("in for...\n");
-            }
-            else if(mark==SEMICOLON){
-                NEXT;
-                expr();
-                delete_tmp();
-                if(mark==SEMICOLON){
-                    NEXT;
-                    if(mark==IDENTIFIER){
-                        expr();
-                        delete_tmp();
-                        if(mark==RSMLBREAKET){
-                            NEXT;
-                            if(mark==LBIGBRACKET) {
-                                NEXT;
-                                code_block();
-                                if(mark==RBIGBRACKET){
-                                    gene_del(function_cnt,domain_cnt);
-                                    domain_cnt--;
-                                    NEXT;
-
-                                }
-                                else error("in for...\n");
-                            }
-                            else error("in for...\n");
-                        }
-                        else error("in for...\n");
-                    }
-                    else if(mark==RSMLBREAKET){
-                        NEXT;
-                        if(mark==LBIGBRACKET) {
-                            NEXT;
-                            code_block();
-                            if(mark==RBIGBRACKET){
-                                gene_del(function_cnt,domain_cnt);
-                                domain_cnt--;
-                                NEXT;
                             }
                             else error("in for...\n");
                         }
@@ -1189,19 +1204,27 @@ void for_expr(){
 }
 void while_expr(){
     domain_cnt++;
+    _while *tmp=new _while;
+    tmp->type=WHILE;
+    tmp->begin=instruction_cnt;
     if(!strcmp(str,"while")){
         NEXT;
         if(mark==LSMLBREAKET){
             NEXT;
-            expr();
+            char *retname=expr()->retname;
+            gene_head_while(retname,tmp);
             delete_tmp();
+            loop_stack.push((loop*)tmp);
             if(mark==RSMLBREAKET){
                 NEXT;
                 if(mark==LBIGBRACKET){
                     NEXT;
                     code_block();
                     if(mark==RBIGBRACKET){
-                        gene_del(function_cnt,domain_cnt);
+                        tmp=(_while*)loop_stack.top();
+                        gene_tail_while(tmp);
+                        delete tmp;
+                        loop_stack.pop();
                         domain_cnt--;
                         NEXT;
                     }
@@ -1215,54 +1238,67 @@ void while_expr(){
     }
     else error("in while\n");
 }
-void if_expr(){
-    domain_cnt++;
-    if(!strcmp(str,"if")){
-        NEXT;
-        if(mark==LSMLBREAKET){
+void code_block(){
+    //printf("im in\n");
+    if(mark==TYPE||mark==IDENTIFIER||mark==SEMICOLON||mark==LSMLBREAKET){
+        sentence();
+        if(mark==SEMICOLON){
             NEXT;
-            expr();
-            delete_tmp();
-            if(mark==RSMLBREAKET){
-
-                NEXT;
-                if(mark==LBIGBRACKET){
-                    printf("ok\n");
-
-                    NEXT;
-                    printf("im in\n");
-                    code_block();
-                    if(mark==RBIGBRACKET){
-                        gene_del(function_cnt,domain_cnt);
-                        domain_cnt--;
-                        NEXT;
-                        if(!strcmp(str,"else")){
-                            NEXT;
-                            if(!strcmp(str,"if")){
-                                if_expr();
-                            }
-                            else if(mark==LBIGBRACKET){
-
-                                domain_cnt++;
-                                NEXT;
-                                code_block();
-                                if(mark==RBIGBRACKET){
-                                    gene_del(function_cnt,domain_cnt);
-                                    domain_cnt--;
-                                    NEXT;
-                                    return ;
-                                }
-                                else error("in if_expr\n");
-                            }
-                            else error("in if_expr\n");
-                        }
-                    }
-                    else error("in if_expr\n");
-                }
-                else error("in if_expr\n");
-            }
-            else error("in if_expr\n");
+            code_block();
         }
-        else error("in if_expr\n");
+    }
+    else if(mark==RESERVER){
+        if(!strcmp(str,"return")){
+            ret();
+            if(mark==SEMICOLON){
+                NEXT;
+                code_block();
+            }
+        }
+        if(!strcmp(str,"for")){
+            isloop++;
+            for_expr();
+            isloop--;
+            printf("sadfasdf  %d \n",isloop);
+            code_block();
+        }
+        else if(!strcmp(str,"while")){
+            isloop++;
+            while_expr();
+            isloop--;
+            code_block();
+        }
+        else if(!strcmp(str,"if")){
+            auto tmp=new _if;
+            if_expr(tmp);
+            code_block();
+        }
+        else if(!strcmp(str,"continue")||!strcmp(str,"break")){
+            printf("isloop = %d\n",isloop);
+            if(!isloop) error("no loop");
+            if(!strcmp(str,"continue")){
+                gene_continue();
+            }
+            else{
+                gene_break();
+            }
+            NEXT;
+            if(mark==SEMICOLON){
+                NEXT;
+                code_block();
+            }
+        }
+    }
+    else if(mark==LBIGBRACKET) {
+        NEXT;
+        domain_cnt++;
+        code_block();
+        gene_del(function_cnt,domain_cnt);
+        domain_cnt--;
+        if(mark==RBIGBRACKET){
+            NEXT;
+            code_block();
+        }
+        else error("expect }");
     }
 }

@@ -6,9 +6,12 @@ CMakeFiles/compiler.dir/error.cpp.o: ../error.h
 
 CMakeFiles/compiler.dir/generate.cpp.o: ../error.h
 CMakeFiles/compiler.dir/generate.cpp.o: ../generate.cpp
+CMakeFiles/compiler.dir/generate.cpp.o: ../generate.h
+CMakeFiles/compiler.dir/generate.cpp.o: ../scanner.h
 CMakeFiles/compiler.dir/generate.cpp.o: ../semantic.h
 
 CMakeFiles/compiler.dir/main.cpp.o: ../error.h
+CMakeFiles/compiler.dir/main.cpp.o: ../generate.h
 CMakeFiles/compiler.dir/main.cpp.o: ../main.cpp
 CMakeFiles/compiler.dir/main.cpp.o: ../parser.h
 CMakeFiles/compiler.dir/main.cpp.o: ../scanner.h

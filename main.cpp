@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #include "scanner.h"
 #include "parser.h"
+#include "generate.h"
 char tmp[100];
 FILE *out;
 
@@ -10,6 +11,7 @@ int main() {
     freopen("in.txt","r",stdin);
     init();
     parser();
+    generate_all();
     //test();
     //printf("success\n");
     return 0;

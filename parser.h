@@ -6,7 +6,7 @@
 #define COMPILER_PARSER_H
 
 #include "semantic.h"
-
+#include "generate.h"
 #define NEXT mark=get_next_token()
 
 
@@ -38,7 +38,7 @@
 //  func->(real_argument_list)|e
 //  real_argument_list->expr _real_argument_list|e
 //  _real_argument_list->,expr _real_argument_list|e
-//  for_expr->(statement|expr|e;expr;expr|e){code_block}
+//  for_expr->(sentence;expr;expr|e){code_block}
 //  while_expr->(expr){code_block}
 //  if_expr->if(expr){code_block}|if(expr)else if_expr|if(expr)else{code_block}
 //  ret->return expr|return
@@ -80,11 +80,11 @@ void function();//function statement or defination
 void argument_list(std::vector<int>&);//
 void _argument_list(std::vector<int>&);
 
-void code_block();
+
 void sentence();
 void X(int );
 void statement();
-void equal(int );
+void equal(int ,const char *);
 
 void iden_or_func();
 void func(const char *function_name);
@@ -92,9 +92,10 @@ void real_argument_list(std::vector<int>&);
 void _real_argument_list(std::vector<int>&);
 
 void ret();
-void if_expr();
+void if_expr(_if *);
 void while_expr();
 void for_expr();
+void code_block();
 
 
 

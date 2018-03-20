@@ -22,6 +22,8 @@
 #define FUNCTION 14
 #define _INT 15
 #define _LONG 16
+#define WHILE 17
+#define FOR 18
 int get_next_token();
 int hash(const char *);
 void init();

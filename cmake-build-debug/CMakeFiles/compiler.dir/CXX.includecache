@@ -6,17 +6,17 @@
 
 #IncludeRegexTransform: 
 
-/home/jason/CLionProjects/compiler/error.cpp
+/home/jason/Program/compiler/error.cpp
 error.h
-/home/jason/CLionProjects/compiler/error.h
+/home/jason/Program/compiler/error.h
 cstdio
 -
 cstdlib
 -
 
-/home/jason/CLionProjects/compiler/error.h
+/home/jason/Program/compiler/error.h
 
-/home/jason/CLionProjects/compiler/generate.cpp
+/home/jason/Program/compiler/generate.cpp
 cstdio
 -
 cstring
@@ -25,40 +25,54 @@ algorithm
 -
 iostream
 -
+stack
+-
 semantic.h
-/home/jason/CLionProjects/compiler/semantic.h
+/home/jason/Program/compiler/semantic.h
+scanner.h
+/home/jason/Program/compiler/scanner.h
+generate.h
+/home/jason/Program/compiler/generate.h
 
-/home/jason/CLionProjects/compiler/generate.h
+/home/jason/Program/compiler/generate.h
 cstdio
 -
+vector
+-
 
-/home/jason/CLionProjects/compiler/main.cpp
+/home/jason/Program/compiler/main.cpp
 bits/stdc++.h
 -
 scanner.h
-/home/jason/CLionProjects/compiler/scanner.h
+/home/jason/Program/compiler/scanner.h
 parser.h
-/home/jason/CLionProjects/compiler/parser.h
-
-/home/jason/CLionProjects/compiler/parser.cpp
-parser.h
-/home/jason/CLionProjects/compiler/parser.h
-scanner.h
-/home/jason/CLionProjects/compiler/scanner.h
-error.h
-/home/jason/CLionProjects/compiler/error.h
-semantic.h
-/home/jason/CLionProjects/compiler/semantic.h
+/home/jason/Program/compiler/parser.h
 generate.h
-/home/jason/CLionProjects/compiler/generate.h
+/home/jason/Program/compiler/generate.h
+
+/home/jason/Program/compiler/parser.cpp
+parser.h
+/home/jason/Program/compiler/parser.h
+scanner.h
+/home/jason/Program/compiler/scanner.h
+error.h
+/home/jason/Program/compiler/error.h
+semantic.h
+/home/jason/Program/compiler/semantic.h
+generate.h
+/home/jason/Program/compiler/generate.h
 cstring
 -
+stack
+-
 
-/home/jason/CLionProjects/compiler/parser.h
+/home/jason/Program/compiler/parser.h
 semantic.h
-/home/jason/CLionProjects/compiler/semantic.h
+/home/jason/Program/compiler/semantic.h
+generate.h
+/home/jason/Program/compiler/generate.h
 
-/home/jason/CLionProjects/compiler/scanner.cpp
+/home/jason/Program/compiler/scanner.cpp
 string
 -
 cstdio
@@ -68,31 +82,31 @@ cstring
 unordered_map
 -
 scanner.h
-/home/jason/CLionProjects/compiler/scanner.h
+/home/jason/Program/compiler/scanner.h
 iostream
 -
 error.h
-/home/jason/CLionProjects/compiler/error.h
+/home/jason/Program/compiler/error.h
 
-/home/jason/CLionProjects/compiler/scanner.h
+/home/jason/Program/compiler/scanner.h
 
-/home/jason/CLionProjects/compiler/semantic.cpp
+/home/jason/Program/compiler/semantic.cpp
 semantic.h
-/home/jason/CLionProjects/compiler/semantic.h
+/home/jason/Program/compiler/semantic.h
 scanner.h
-/home/jason/CLionProjects/compiler/scanner.h
+/home/jason/Program/compiler/scanner.h
 generate.h
-/home/jason/CLionProjects/compiler/generate.h
+/home/jason/Program/compiler/generate.h
 cstring
 -
 string
 -
 
-/home/jason/CLionProjects/compiler/semantic.h
+/home/jason/Program/compiler/semantic.h
 vector
 -
 unordered_map
 -
 error.h
-/home/jason/CLionProjects/compiler/error.h
+/home/jason/Program/compiler/error.h
 

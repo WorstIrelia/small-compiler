@@ -47,7 +47,7 @@ struct expr_node{
         father=NULL;
         lname=NULL;
         rname=NULL;
-        retname==NULL;
+        retname=NULL;
     };
     //virtual
 
@@ -64,6 +64,7 @@ struct function_elem{
     bool isdefine;//是否定义
     bool isuse;//最后扫一遍四元式确定有没有没有使用去没有define的
     std::vector<int>argument_list;
+    std::vector<char *>name_list;
 
 };
 //符号表中的标识符
@@ -85,6 +86,7 @@ bool redefine(const char *str,int function,int domain);//判断是否是重复�
 int get_identifer_type(const char *str);//得到符号的属性
 
 
+void add_name(const char *function_name,const char *str);
 void add_function(const char *str,int type,std::vector<int> &v,bool isdefine,bool isuse);////增加一个函数到函数表中
 bool function_judge(const char *str,std::vector<int>&v);//声明过 判断是不是这个函数的定义
 bool in_function_list(const char *str);//判断这个函数有没有声明过
