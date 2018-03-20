@@ -37,7 +37,6 @@ void delete_tmp();
 void gene_add(const char *);
 void gene_lea(const char *,int );
 void gene_two_op(const char *lname,const char *rname,const char *op,const char *tmpname);
-void gene_function(const char *function_name,const char *tmpname);
 void gene_del(int function,int domian);
 void mark_add(const char *str,int function,int domain);
 void gene_real_argument(const char *);
@@ -57,5 +56,10 @@ void generate_all();
 void gene_call_begin();
 void gene_call_end(const char *,const char *);
 
+void gene_start();
 void gene_return(const char *str);
+void del(int num);
+void scan();
+
+void return_test();
 #endif //COMPILER_GENERATE_H

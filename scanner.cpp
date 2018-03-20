@@ -111,21 +111,23 @@ int get_next_token(){//返回下一个词
         *(++p)=0;
         printf("%s\n",str);
         if(f.count(hash(str))) return f[hash(str)];
-
         return IDENTIFIER;
     }
     if(now_char==EOF){
         return EOF;
     }
     str[0]=now_char;
-    //这部分的判断还有问题 不能识别三个字节的符号
     int tmp=str[0]*10007+next_char;
     if(level.count(tmp)){
         str[1]=next_char;
+        str[2]=0;
         NEXT_CHAR;
 
-
-        str[2]=0;
+        if((!strcmp(str,"<<")||!strcmp(str,">>"))&&next_char=='='){
+            str[2]=next_char;
+            str[3]=0;
+            NEXT_CHAR;
+        }
     }
     else str[1]=0;
     printf("%s\n",str);

@@ -13,16 +13,20 @@ int tmp_cnt=1;
 
 extern std::vector<std::string> add_del[100][100];
 extern std::unordered_map<int,std::vector<identifier_elem>> symbol_list;
+extern std::unordered_map<std::string,function_elem> function_list;
 extern std::unordered_map<std::string,int>map;
 extern FILE *out;
 extern std::unordered_map<int,int>level;
 
+
 std::stack<int>function_return_mark;
 std::vector<char *>instruction;
-int instruction_cnt=0;
 std::stack<loop*> loop_stack;
 std::stack<_if*> if_stack;
-char trans[32];
+
+int instruction_cnt=0;
+
+static char trans[32];
 char *it[128];
 char *atoi(){
     int cnt=0;
@@ -39,12 +43,10 @@ char *next_tmp(){
     tmp[0]='%';
     strcpy(tmp+1,atoi());
     it[tmp_cnt++]=tmp;
-    printf("%s uuuuuuuuuuuuuu\n",tmp);
     return tmp;
 
 }
 void delete_tmp(){
-    printf("im in delete\n");
     for(int i=1;i<tmp_cnt;i++) free(it[i]);
     tmp_cnt=1;
 }
@@ -72,24 +74,18 @@ void gene_two_op(const char *lname,const char *rname,const char *op,const char *
     instruction.push_back(p);
     instruction_cnt++;
 }
-void gene_function(const char *function_name,const char *tmpname){
-    fprintf(out,"call %s\n",function_name);
-    fprintf(out,"= %%a %s\n",tmpname);
-}
 
 void gene_del(int function,int domain){
     int i=(int)add_del[function][domain].size();
     i--;
     for(;i>=0;i--){
         symbol_list[map[add_del[function][domain][i]]].pop_back();
-        //std::cout<<"del"<<' '<<add_del[function][domain][i]<<' '<<function<<' '<<domain<<std::endl;
     }
     add_del[function][domain].clear();
 
 }
 
 void mark_add(const char *str,int function,int domain){
-    //fprintf(out,"add %s\n",str);
     std::string tmp=str;
     add_del[function][domain].push_back(tmp);
 
@@ -288,7 +284,7 @@ void gene_call_end(const char *str,const char *ret){
     instruction[function_return_mark.top()]=p;
     function_return_mark.pop();
     p=(char *)malloc(INSTRUCTION_SIZE);
-    sprintf(p,"= %s %%a",ret);//zm jiexi biaodashi
+    sprintf(p,"= %s %%a\n",ret);//zm jiexi biaodashi
     instruction.push_back(p);
     instruction_cnt++;
 }
@@ -297,15 +293,24 @@ void gene_call_end(const char *str,const char *ret){
 
 
 void generate_all(){
+    scan();
     for(int i=0;i<instruction.size();i++){
-        printf("%d %s\n",i,instruction[i]);
+        fprintf(out,"%d %s\n",i,instruction[i]);
     }
 }
 
 void gene_lea(const char *str,int offset){
     offset+=16;
     char *p=(char *)malloc(INSTRUCTION_SIZE);
-    sprintf(p,"lea %s (bp+%d)\n",str,offset);
+    sprintf(p,"add %s\n",str);
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"push\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= %s (bp+%d)\n",str,offset);
     instruction.push_back(p);
     instruction_cnt++;
 }
@@ -338,4 +343,53 @@ void gene_return(const char *str){
     instruction.push_back(p);
     instruction_cnt++;
 
+}
+void gene_start(){
+    char *p=(char *)malloc(INSTRUCTION_SIZE);
+    memset(p,0,sizeof(p));
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"+ sp 8 sp\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= (sp) 0\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"call main\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+}
+void del(int num){
+    for(int i=0;i<num;i++){
+        instruction_cnt--;
+        free(instruction[instruction_cnt]);
+        instruction.pop_back();
+    }
+}
+void scan(){
+    for(int i=0;i<instruction_cnt;i++){
+        char tmp[128];
+        char *p=instruction[i];
+        sscanf(p,"%s",tmp);
+        if(!strcmp(tmp,"call")){
+            p+=5;
+            sscanf(p,"%s",tmp);
+            int entry=function_list[tmp].entry;
+            if(entry==0){
+                printf("%s is not defined\n",tmp);
+                error("");
+            }
+            sprintf(instruction[i],"= pc %d\n",entry);
+        }
+    }
+}
+void return_test(){
+    char tmp[128];
+    sscanf(instruction[instruction_cnt-1]+2,"%s",tmp);
+    if(strcmp(tmp,"pc")){
+        error("you may forget return?");
+    }
 }

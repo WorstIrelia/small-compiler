@@ -8,38 +8,38 @@
 		<Option virtualFolders="CMake Files\;"/>
 		<Build>
 			<Target title="all">
-				<Option working_dir="/home/jason/Program/compiler/cmake-build-debug"/>
+				<Option working_dir="/home/jason/CLionProjects/compiler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 all"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="rebuild_cache">
-				<Option working_dir="/home/jason/Program/compiler/cmake-build-debug"/>
+				<Option working_dir="/home/jason/CLionProjects/compiler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 rebuild_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="edit_cache">
-				<Option working_dir="/home/jason/Program/compiler/cmake-build-debug"/>
+				<Option working_dir="/home/jason/CLionProjects/compiler/cmake-build-debug"/>
 				<Option type="4"/>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 edit_cache"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="compiler">
-				<Option output="/home/jason/Program/compiler/cmake-build-debug/compiler" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/jason/Program/compiler/cmake-build-debug"/>
+				<Option output="/home/jason/CLionProjects/compiler/cmake-build-debug/compiler" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jason/CLionProjects/compiler/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -54,15 +54,15 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 compiler"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 compiler"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 			<Target title="compiler/fast">
-				<Option output="/home/jason/Program/compiler/cmake-build-debug/compiler" prefix_auto="0" extension_auto="0"/>
-				<Option working_dir="/home/jason/Program/compiler/cmake-build-debug"/>
+				<Option output="/home/jason/CLionProjects/compiler/cmake-build-debug/compiler" prefix_auto="0" extension_auto="0"/>
+				<Option working_dir="/home/jason/CLionProjects/compiler/cmake-build-debug"/>
 				<Option object_output="./"/>
 				<Option type="1"/>
 				<Option compiler="gcc"/>
@@ -77,47 +77,47 @@
 					<Add directory="/usr/include"/>
 				</Compiler>
 				<MakeCommands>
-					<Build command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 compiler/fast"/>
-					<CompileFile command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
-					<Clean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
-					<DistClean command="/usr/bin/make -j8 -f &quot;/home/jason/Program/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<Build command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 compiler/fast"/>
+					<CompileFile command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 &quot;$file&quot;"/>
+					<Clean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
+					<DistClean command="/usr/bin/make -j4 -f &quot;/home/jason/CLionProjects/compiler/cmake-build-debug/Makefile&quot;  VERBOSE=1 clean"/>
 				</MakeCommands>
 			</Target>
 		</Build>
-		<Unit filename="/home/jason/Program/compiler/error.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/error.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/error.h">
+		<Unit filename="/home/jason/CLionProjects/compiler/error.h">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/generate.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/generate.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/generate.h">
+		<Unit filename="/home/jason/CLionProjects/compiler/generate.h">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/main.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/main.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/parser.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/parser.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/parser.h">
+		<Unit filename="/home/jason/CLionProjects/compiler/parser.h">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/scanner.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/scanner.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/scanner.h">
+		<Unit filename="/home/jason/CLionProjects/compiler/scanner.h">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/semantic.cpp">
+		<Unit filename="/home/jason/CLionProjects/compiler/semantic.cpp">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/semantic.h">
+		<Unit filename="/home/jason/CLionProjects/compiler/semantic.h">
 			<Option target="compiler"/>
 		</Unit>
-		<Unit filename="/home/jason/Program/compiler/CMakeLists.txt">
+		<Unit filename="/home/jason/CLionProjects/compiler/CMakeLists.txt">
 			<Option virtualFolder="CMake Files\"/>
 		</Unit>
 	</Project>

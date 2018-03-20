@@ -5,6 +5,6 @@
 #ifndef COMPILER_ERROR_H
 #define COMPILER_ERROR_H
 
-void error(const char *p);
+void error(const char *p,...);
 
 #endif //COMPILER_ERROR_H

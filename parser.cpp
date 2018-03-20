@@ -3,7 +3,6 @@
 //
 #include "parser.h"
 #include "scanner.h"
-#include "error.h"
 #include "semantic.h"
 #include "generate.h"
 #include <cstring>
@@ -19,31 +18,26 @@ extern int function_cnt;
 extern std::unordered_map<int,int> level;
 extern std::stack<loop *>loop_stack;
 extern std::stack<_if *>if_stack;
-int isloop=0;
+static int isloop=0;
 expr_node *root=new expr_node();
 expr_node *current=root;
 
+static char *func_name;
 
 expr_node* expr(){//奇怪
 
-    expr_node *tmp=new expr_node;
+    auto tmp=new expr_node;
+
     node_init(current,tmp);
     current=tmp;
 
     _A();
     tmp->father->retname=tmp->retname;
     tmp->father->rettype=tmp->rettype;
-    printf("%s\n",tmp->retname);
+    //printf("%s\n",tmp->retname);
     current=tmp->father;
 
     return current;
-}
-void test(){
-    NEXT;
-    printf("im in\n");
-    expr();
-    delete_tmp();
-    printf("success\n");
 }
 
 void _A(){
@@ -335,7 +329,7 @@ void _F(){
     _G();
 
     tmp->father->retname=tmp->retname;
-    printf("%s test return name\n",tmp->retname);
+    //printf("%s test return name\n",tmp->retname);
     tmp->father->rettype=tmp->rettype;
 
     current=tmp->father;
@@ -346,7 +340,7 @@ void _F(){
     _F_();
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
-        printf("%s test return name\n",tmp->retname);
+        //printf("%s test return name\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -394,7 +388,7 @@ void _G(){
 
     tmp->father->retname=tmp->retname;
     tmp->father->rettype=tmp->rettype;
-    printf("%s test return name\n",tmp->retname);
+    //printf("%s test return name\n",tmp->retname);
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
@@ -402,7 +396,7 @@ void _G(){
     _G_();
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
-        printf("%s test return name\n",tmp->retname);
+        //printf("%s test return name\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -451,17 +445,17 @@ void _H(){
 
     tmp->father->retname=tmp->retname;
     tmp->father->rettype=tmp->rettype;
-    printf("%s test return name\n",tmp->retname);
+    //printf("%s test return name\n",tmp->retname);
     current=tmp->father;
     tmp=new expr_node;
     node_init(current,tmp);
     current=tmp;
 
     _H_();
-    printf("im in\n");
+    //printf("im in\n");
     if(tmp->retname) {
         tmp->father->retname=tmp->retname;
-        printf("%s test return name fffffffffff\n",tmp->retname);
+        //printf("%s test return name fffffffffff\n",tmp->retname);
         tmp->father->rettype=tmp->rettype;
     }
     current=tmp->father;
@@ -483,8 +477,8 @@ void _H_(){
 
         tmp1->father->rname=tmp1->retname;
         tmp1->father->retname=next_tmp();
-        printf("okok\n");
-        printf("%s test return name\n",tmp1->father->retname);
+        //printf("okok\n");
+        //printf("%s test return name\n",tmp1->father->retname);
         tmp1->father->rtype=tmp1->rettype;
         tmp1->father->rettype=tmp1->father->ltype;
 
@@ -497,13 +491,13 @@ void _H_(){
         current=tmp1;
 
         _H_();
-        printf("%s test return namehhhhhh\n",tmp1->father->retname);
-        printf("%p dddddddddd\n",tmp1->retname);
+        //printf("%s test return namehhhhhh\n",tmp1->father->retname);
+        //printf("%p dddddddddd\n",tmp1->retname);
         if(tmp1->retname) {
             tmp1->father->retname=tmp1->retname;
-            printf("%s test return name\n",tmp1->father->retname);
+           // printf("%s test return name\n",tmp1->father->retname);
         }
-        printf("im out\n");
+        //printf("im out\n");
         current=tmp1->father;
     }
 }
@@ -854,6 +848,8 @@ void argument_list(std::vector<int> &argument_list_v){
 void function(){
     int type;
     char name[128];
+    func_name=name;
+    int entry=instruction_cnt;
     if(mark==TYPE){
         type=gettype(str);
         NEXT;
@@ -872,13 +868,14 @@ void function(){
                     if (mark == LBIGBRACKET) {//定义函数
                         if(in_function_list(name)){//如果声明过 要求参数相等 而且没定义
                             if(!function_judge(name,argument_list_v)) {
-                                printf("error in funciont %s\n",name);
-                                error("");
+
+                                error("error in funciont %s\n",name);
                             }
                         }
-                        add_function(name,type,argument_list_v,1,0);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
+                        add_function(name,type,argument_list_v,1,is_use(name),entry);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
                         NEXT;
                         code_block();
+                        return_test();
                         if (mark == RBIGBRACKET) {
                             gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
                             NEXT;
@@ -888,10 +885,11 @@ void function(){
                     }
                     else if(mark==SEMICOLON){//这只是个函数声明
                         if(in_function_list(name)){
-                            printf("function %s ",name);
-                            error("redefine");
+                            //printf("function %s ",name);
+                            error("fucntion is redefine %s\n",name);
                         }
-                        add_function(name,type,argument_list_v,0,0);
+                        del(argument_list_v.size()*3);
+                        add_function(name,type,argument_list_v,0,0,0);
                         NEXT;
                     }
                     else error("in function,expect {\n");
@@ -1054,10 +1052,10 @@ void if_expr(_if *tmp){
 
                 NEXT;
                 if(mark==LBIGBRACKET){
-                    printf("ok\n");
+                    //printf("ok\n");
 
                     NEXT;
-                    printf("im in\n");
+                    //printf("im in\n");
                     if_stack.push(tmp);
                     code_block();
                     if(mark==RBIGBRACKET){
@@ -1115,13 +1113,21 @@ void if_expr(_if *tmp){
 void ret(){
     if(!strcmp(str,"return")){
         NEXT;
+        int type=get_function_type(func_name);
         if(mark==IDENTIFIER||mark==NUM){
-
-            gene_return(expr()->retname);
+            auto p=expr();
+            if(p->rettype!=type){
+                if((type==_INT||type==_LONG)&&p->rettype==NUM);//modify
+                else error("return type not same in %s\n",func_name);
+            }
+            gene_return(p->retname);
             delete_tmp();
         }
         else if(mark==SEMICOLON)
         {
+            if(type==_INT||type==_LONG) {// modify
+                error("no return type in %s\n",func_name);
+            }
             gene_return(NULL);
         }
         else error("in return");
@@ -1259,7 +1265,7 @@ void code_block(){
             isloop++;
             for_expr();
             isloop--;
-            printf("sadfasdf  %d \n",isloop);
+            //printf("sadfasdf  %d \n",isloop);
             code_block();
         }
         else if(!strcmp(str,"while")){
@@ -1274,7 +1280,7 @@ void code_block(){
             code_block();
         }
         else if(!strcmp(str,"continue")||!strcmp(str,"break")){
-            printf("isloop = %d\n",isloop);
+            //printf("isloop = %d\n",isloop);
             if(!isloop) error("no loop");
             if(!strcmp(str,"continue")){
                 gene_continue();

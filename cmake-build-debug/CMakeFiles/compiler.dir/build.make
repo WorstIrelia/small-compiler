@@ -34,19 +34,19 @@ cmake_force:
 SHELL = /bin/sh
 
 # The CMake executable.
-CMAKE_COMMAND = /home/jason/Downloads/clion-2017.3.4/bin/cmake/bin/cmake
+CMAKE_COMMAND = /home/jason/Clion/clion-2017.3.4/bin/cmake/bin/cmake
 
 # The command to remove a file.
-RM = /home/jason/Downloads/clion-2017.3.4/bin/cmake/bin/cmake -E remove -f
+RM = /home/jason/Clion/clion-2017.3.4/bin/cmake/bin/cmake -E remove -f
 
 # Escaping for special characters.
 EQUALS = =
 
 # The top-level source directory on which CMake was run.
-CMAKE_SOURCE_DIR = /home/jason/Program/compiler
+CMAKE_SOURCE_DIR = /home/jason/CLionProjects/compiler
 
 # The top-level build directory on which CMake was run.
-CMAKE_BINARY_DIR = /home/jason/Program/compiler/cmake-build-debug
+CMAKE_BINARY_DIR = /home/jason/CLionProjects/compiler/cmake-build-debug
 
 # Include any dependencies generated for this target.
 include CMakeFiles/compiler.dir/depend.make
@@ -59,16 +59,16 @@ include CMakeFiles/compiler.dir/flags.make
 
 CMakeFiles/compiler.dir/main.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/main.cpp.o: ../main.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/compiler.dir/main.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/main.cpp.o -c /home/jason/Program/compiler/main.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_1) "Building CXX object CMakeFiles/compiler.dir/main.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/main.cpp.o -c /home/jason/CLionProjects/compiler/main.cpp
 
 CMakeFiles/compiler.dir/main.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/main.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/main.cpp > CMakeFiles/compiler.dir/main.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/main.cpp > CMakeFiles/compiler.dir/main.cpp.i
 
 CMakeFiles/compiler.dir/main.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/main.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/main.cpp -o CMakeFiles/compiler.dir/main.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/main.cpp -o CMakeFiles/compiler.dir/main.cpp.s
 
 CMakeFiles/compiler.dir/main.cpp.o.requires:
 
@@ -83,16 +83,16 @@ CMakeFiles/compiler.dir/main.cpp.o.provides.build: CMakeFiles/compiler.dir/main.
 
 CMakeFiles/compiler.dir/scanner.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/scanner.cpp.o: ../scanner.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/compiler.dir/scanner.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/scanner.cpp.o -c /home/jason/Program/compiler/scanner.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_2) "Building CXX object CMakeFiles/compiler.dir/scanner.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/scanner.cpp.o -c /home/jason/CLionProjects/compiler/scanner.cpp
 
 CMakeFiles/compiler.dir/scanner.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/scanner.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/scanner.cpp > CMakeFiles/compiler.dir/scanner.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/scanner.cpp > CMakeFiles/compiler.dir/scanner.cpp.i
 
 CMakeFiles/compiler.dir/scanner.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/scanner.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/scanner.cpp -o CMakeFiles/compiler.dir/scanner.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/scanner.cpp -o CMakeFiles/compiler.dir/scanner.cpp.s
 
 CMakeFiles/compiler.dir/scanner.cpp.o.requires:
 
@@ -107,16 +107,16 @@ CMakeFiles/compiler.dir/scanner.cpp.o.provides.build: CMakeFiles/compiler.dir/sc
 
 CMakeFiles/compiler.dir/parser.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/parser.cpp.o: ../parser.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/compiler.dir/parser.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/parser.cpp.o -c /home/jason/Program/compiler/parser.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_3) "Building CXX object CMakeFiles/compiler.dir/parser.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/parser.cpp.o -c /home/jason/CLionProjects/compiler/parser.cpp
 
 CMakeFiles/compiler.dir/parser.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/parser.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/parser.cpp > CMakeFiles/compiler.dir/parser.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/parser.cpp > CMakeFiles/compiler.dir/parser.cpp.i
 
 CMakeFiles/compiler.dir/parser.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/parser.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/parser.cpp -o CMakeFiles/compiler.dir/parser.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/parser.cpp -o CMakeFiles/compiler.dir/parser.cpp.s
 
 CMakeFiles/compiler.dir/parser.cpp.o.requires:
 
@@ -131,16 +131,16 @@ CMakeFiles/compiler.dir/parser.cpp.o.provides.build: CMakeFiles/compiler.dir/par
 
 CMakeFiles/compiler.dir/error.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/error.cpp.o: ../error.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/compiler.dir/error.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/error.cpp.o -c /home/jason/Program/compiler/error.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_4) "Building CXX object CMakeFiles/compiler.dir/error.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/error.cpp.o -c /home/jason/CLionProjects/compiler/error.cpp
 
 CMakeFiles/compiler.dir/error.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/error.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/error.cpp > CMakeFiles/compiler.dir/error.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/error.cpp > CMakeFiles/compiler.dir/error.cpp.i
 
 CMakeFiles/compiler.dir/error.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/error.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/error.cpp -o CMakeFiles/compiler.dir/error.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/error.cpp -o CMakeFiles/compiler.dir/error.cpp.s
 
 CMakeFiles/compiler.dir/error.cpp.o.requires:
 
@@ -155,16 +155,16 @@ CMakeFiles/compiler.dir/error.cpp.o.provides.build: CMakeFiles/compiler.dir/erro
 
 CMakeFiles/compiler.dir/semantic.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/semantic.cpp.o: ../semantic.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/compiler.dir/semantic.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/semantic.cpp.o -c /home/jason/Program/compiler/semantic.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_5) "Building CXX object CMakeFiles/compiler.dir/semantic.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/semantic.cpp.o -c /home/jason/CLionProjects/compiler/semantic.cpp
 
 CMakeFiles/compiler.dir/semantic.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/semantic.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/semantic.cpp > CMakeFiles/compiler.dir/semantic.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/semantic.cpp > CMakeFiles/compiler.dir/semantic.cpp.i
 
 CMakeFiles/compiler.dir/semantic.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/semantic.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/semantic.cpp -o CMakeFiles/compiler.dir/semantic.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/semantic.cpp -o CMakeFiles/compiler.dir/semantic.cpp.s
 
 CMakeFiles/compiler.dir/semantic.cpp.o.requires:
 
@@ -179,16 +179,16 @@ CMakeFiles/compiler.dir/semantic.cpp.o.provides.build: CMakeFiles/compiler.dir/s
 
 CMakeFiles/compiler.dir/generate.cpp.o: CMakeFiles/compiler.dir/flags.make
 CMakeFiles/compiler.dir/generate.cpp.o: ../generate.cpp
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/compiler.dir/generate.cpp.o"
-	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/generate.cpp.o -c /home/jason/Program/compiler/generate.cpp
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_6) "Building CXX object CMakeFiles/compiler.dir/generate.cpp.o"
+	/usr/bin/c++  $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -o CMakeFiles/compiler.dir/generate.cpp.o -c /home/jason/CLionProjects/compiler/generate.cpp
 
 CMakeFiles/compiler.dir/generate.cpp.i: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Preprocessing CXX source to CMakeFiles/compiler.dir/generate.cpp.i"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/Program/compiler/generate.cpp > CMakeFiles/compiler.dir/generate.cpp.i
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -E /home/jason/CLionProjects/compiler/generate.cpp > CMakeFiles/compiler.dir/generate.cpp.i
 
 CMakeFiles/compiler.dir/generate.cpp.s: cmake_force
 	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green "Compiling CXX source to assembly CMakeFiles/compiler.dir/generate.cpp.s"
-	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/Program/compiler/generate.cpp -o CMakeFiles/compiler.dir/generate.cpp.s
+	/usr/bin/c++ $(CXX_DEFINES) $(CXX_INCLUDES) $(CXX_FLAGS) -S /home/jason/CLionProjects/compiler/generate.cpp -o CMakeFiles/compiler.dir/generate.cpp.s
 
 CMakeFiles/compiler.dir/generate.cpp.o.requires:
 
@@ -221,7 +221,7 @@ compiler: CMakeFiles/compiler.dir/semantic.cpp.o
 compiler: CMakeFiles/compiler.dir/generate.cpp.o
 compiler: CMakeFiles/compiler.dir/build.make
 compiler: CMakeFiles/compiler.dir/link.txt
-	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jason/Program/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable compiler"
+	@$(CMAKE_COMMAND) -E cmake_echo_color --switch=$(COLOR) --green --bold --progress-dir=/home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles --progress-num=$(CMAKE_PROGRESS_7) "Linking CXX executable compiler"
 	$(CMAKE_COMMAND) -E cmake_link_script CMakeFiles/compiler.dir/link.txt --verbose=$(VERBOSE)
 
 # Rule to build all files generated by this target.
@@ -243,6 +243,6 @@ CMakeFiles/compiler.dir/clean:
 .PHONY : CMakeFiles/compiler.dir/clean
 
 CMakeFiles/compiler.dir/depend:
-	cd /home/jason/Program/compiler/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jason/Program/compiler /home/jason/Program/compiler /home/jason/Program/compiler/cmake-build-debug /home/jason/Program/compiler/cmake-build-debug /home/jason/Program/compiler/cmake-build-debug/CMakeFiles/compiler.dir/DependInfo.cmake --color=$(COLOR)
+	cd /home/jason/CLionProjects/compiler/cmake-build-debug && $(CMAKE_COMMAND) -E cmake_depends "Unix Makefiles" /home/jason/CLionProjects/compiler /home/jason/CLionProjects/compiler /home/jason/CLionProjects/compiler/cmake-build-debug /home/jason/CLionProjects/compiler/cmake-build-debug /home/jason/CLionProjects/compiler/cmake-build-debug/CMakeFiles/compiler.dir/DependInfo.cmake --color=$(COLOR)
 .PHONY : CMakeFiles/compiler.dir/depend
 
