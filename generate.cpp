@@ -100,6 +100,10 @@ void gene_add(const char *str){
     sprintf(p,"add %s\n",str);
     instruction.push_back(p);
     instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"push\n");
+    instruction.push_back(p);
+    instruction_cnt++;
 }
 void gene_head_while(const char *str,_while *tmp){
     char *p=(char *)malloc(INSTRUCTION_SIZE);
