@@ -49,16 +49,12 @@ scanner.h
 /home/jason/CLionProjects/compiler/scanner.h
 parser.h
 /home/jason/CLionProjects/compiler/parser.h
-generate.h
-/home/jason/CLionProjects/compiler/generate.h
 
 /home/jason/CLionProjects/compiler/parser.cpp
 parser.h
 /home/jason/CLionProjects/compiler/parser.h
 scanner.h
 /home/jason/CLionProjects/compiler/scanner.h
-error.h
-/home/jason/CLionProjects/compiler/error.h
 semantic.h
 /home/jason/CLionProjects/compiler/semantic.h
 generate.h
@@ -100,8 +96,6 @@ scanner.h
 generate.h
 /home/jason/CLionProjects/compiler/generate.h
 cstring
--
-string
 -
 
 /home/jason/CLionProjects/compiler/semantic.h

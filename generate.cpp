@@ -295,7 +295,7 @@ void gene_call_end(const char *str,const char *ret){
 void generate_all(){
     scan();
     for(int i=0;i<instruction.size();i++){
-        fprintf(out,"%d %s\n",i,instruction[i]);
+        fprintf(out,"%d %s",i,instruction[i]);
     }
 }
 
@@ -339,7 +339,7 @@ void gene_return(const char *str){
     instruction.push_back(p);
     instruction_cnt++;
     p=(char *)malloc(INSTRUCTION_SIZE);
-    sprintf(p,"= pc (sp+8)\n");
+    sprintf(p,"ret (sp+8)\n");
     instruction.push_back(p);
     instruction_cnt++;
 
@@ -347,14 +347,15 @@ void gene_return(const char *str){
 void gene_start(){
     char *p=(char *)malloc(INSTRUCTION_SIZE);
     memset(p,0,sizeof(p));
+    sprintf(p,"\n");
     instruction.push_back(p);
     instruction_cnt++;
     p=(char *)malloc(INSTRUCTION_SIZE);
-    sprintf(p,"+ sp 8 sp\n");
+    sprintf(p,"+ sp 16 sp\n");
     instruction.push_back(p);
     instruction_cnt++;
     p=(char *)malloc(INSTRUCTION_SIZE);
-    sprintf(p,"= (sp) 0\n");
+    sprintf(p,"= (bp+8) 0\n");
     instruction.push_back(p);
     instruction_cnt++;
     p=(char *)malloc(INSTRUCTION_SIZE);
@@ -382,7 +383,7 @@ void scan(){
                 printf("%s is not defined\n",tmp);
                 error("");
             }
-            sprintf(instruction[i],"= pc %d\n",entry);
+            sprintf(instruction[i],"call %d\n",entry);
         }
     }
 }

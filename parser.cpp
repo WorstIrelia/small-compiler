@@ -875,7 +875,8 @@ void function(){
                         add_function(name,type,argument_list_v,1,is_use(name),entry);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
                         NEXT;
                         code_block();
-                        return_test();
+                        //return_test();//有问题
+
                         if (mark == RBIGBRACKET) {
                             gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
                             NEXT;

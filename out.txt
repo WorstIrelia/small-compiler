@@ -1,111 +1,53 @@
 0 
-1 + sp 8 sp
-
-2 = (sp) 0
-
-3 = pc 4
-
+1 + sp 16 sp
+2 = (bp+8) 0
+3 call 38
 4 add x
-
 5 push
-
-6 = x 10
-
-7 add ans
-
-8 push
-
-9 - sp bp (sp)
-
-10 = bp sp
-
-11 + sp 16 sp
-
-12 = (bp+8) 16
-
-13 = (sp) 10
-
-14 push
-
-15 = pc 22
-
-16 = %1 %a
-
-17 = ans %1
-
-18 = %a ans
-
-19 = sp bp
-
-20 - bp (sp) bp
-
-21 = pc (sp+8)
-
-22 add x
-
-23 push
-
-24 = x (bp+16)
-
-25 < x 2 %1
-
-26 = %j %1
-
-27 jt 29
-
-28 jf 33
-
-29 = %a 1
-
-30 = sp bp
-
-31 - bp (sp) bp
-
-32 = pc (sp+8)
-
-33 - sp bp (sp)
-
-34 = bp sp
-
-35 + sp 16 sp
-
-36 = (bp+8) 41
-
-37 - x 1 %1
-
-38 = (sp) %1
-
+6 = x (bp+16)
+7 > 2 x %1
+8 = %j %1
+9 jt 11
+10 jf 15
+11 = %a 1
+12 = sp bp
+13 - bp (sp) bp
+14 ret (sp+8)
+15 - sp bp (sp)
+16 = bp sp
+17 + sp 16 sp
+18 = (bp+8) 23
+19 - x 1 %1
+20 = (sp) %1
+21 push
+22 call 4
+23 = %2 %a
+24 - sp bp (sp)
+25 = bp sp
+26 + sp 16 sp
+27 = (bp+8) 32
+28 - x 2 %3
+29 = (sp) %3
+30 push
+31 call 4
+32 = %4 %a
+33 + %2 %4 %5
+34 = %a %5
+35 = sp bp
+36 - bp (sp) bp
+37 ret (sp+8)
+38 add ans
 39 push
-
-40 = pc 22
-
-41 = %2 %a
-
-42 - sp bp (sp)
-
-43 = bp sp
-
-44 + sp 16 sp
-
-45 = (bp+8) 50
-
-46 - x 2 %3
-
-47 = (sp) %3
-
-48 push
-
-49 = pc 22
-
-50 = %4 %a
-
-51 + %2 %4 %5
-
-52 = %a %5
-
-53 = sp bp
-
-54 - bp (sp) bp
-
-55 = pc (sp+8)
-
+40 - sp bp (sp)
+41 = bp sp
+42 + sp 16 sp
+43 = (bp+8) 47
+44 = (sp) 2
+45 push
+46 call 4
+47 = %1 %a
+48 = ans %1
+49 = %a ans
+50 = sp bp
+51 - bp (sp) bp
+52 ret (sp+8)
