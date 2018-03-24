@@ -34,11 +34,13 @@ struct _if{
 char *atoi();
 char *next_tmp() ;
 void delete_tmp();
+void mark_add(const char *str,int function,int domain);
+void mark_array_add(const char *str,int function,int domain);
 void gene_add(const char *);
 void gene_lea(const char *,int );
 void gene_two_op(const char *lname,const char *rname,const char *op,const char *tmpname);
 void gene_del(int function,int domian);
-void mark_add(const char *str,int function,int domain);
+
 void gene_real_argument(const char *);
 
 void gene_head_if(const char *str,_if *tmp);
@@ -56,6 +58,9 @@ void generate_all();
 void gene_call_begin();
 void gene_call_end(const char *,const char *);
 
+void gene_add_array(const char *,long );
+void gene_offset(const char *,const char *);
+void gene_set_offset(const char *);
 void gene_start();
 void gene_return(const char *str);
 void del(int num);

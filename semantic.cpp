@@ -12,8 +12,10 @@ int function_cnt=0;
 int domain_cnt=0;
 char *function_name;
 std::vector<std::string> add_del[100][100];
+std::vector<std::string> add_array_del[100][100];
 std::unordered_map<std::string,function_elem> function_list;
-extern std::unordered_map<int,int>level;
+std::unordered_map<std::string,std::vector<array_elem>> array_list;
+extern std::unordered_map<long,int>level;
 void add(const char *str,int type,int function,int domain){
     std::string key=str;
     if(!map.count(key)){
@@ -24,11 +26,6 @@ void add(const char *str,int type,int function,int domain){
 
 bool is_use(const char *str){
     return function_list[str].isuse;
-}
-
-void delect(const char *str){//碰到}
-    std::string key=str;
-    symbol_list[map[key]].pop_back();
 }
 
 
@@ -128,4 +125,37 @@ bool type_judge(int ltype,int rtype,const char *op){
     if(rtype==NUM||ltype==NUM) return true;
     if(ltype!=rtype) error("type not same");
     return true;
+}
+
+bool in_array_list(const char *str,int function_cnt,int domain_cnt){
+    if(!array_list.count(str)) return false;
+    array_elem &tmp=array_list[str].back();
+    //printf("array_size %d\n",array_list[str].size());
+    if(function_cnt==tmp.function&&domain_cnt==tmp.domain) return true;
+    return false;
+
+}
+bool is_in_array_list(const char *str,int function_cnt,int domain_cnt){
+    if(!array_list.count(str)) return false;
+    array_elem &tmp=array_list[str].back();
+    //printf("array_size %d\n",array_list[str].size());
+    if(function_cnt==tmp.function&&domain_cnt>=tmp.domain) return true;
+    return false;
+}
+int get_array_dimen(const char *str){
+    //printf("im ss %s\n",str);
+    //printf("array_size %d\n",array_list[str].size());
+    int tmp=array_list[str].back().dimension;
+    //printf("im hhhh\n");
+    return array_list[str].back().dimension;
+}
+void add_array(const char *str,int type,int function_cnt,int domain_cnt,int dimension,std::vector<int>&n){
+    array_elem tmp=array_elem(type,function_cnt,domain_cnt,dimension,n);
+    array_list[str].push_back(tmp);
+    //printf("dddddddddd %s\n",str);
+    //printf("sdf %d\n",array_list[str].size());
+    mark_array_add(str,function_cnt,domain_cnt);
+}
+int get_array_type(const char *str){
+    return array_list[str].back().type;
 }

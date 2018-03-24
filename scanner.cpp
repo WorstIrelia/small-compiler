@@ -12,9 +12,9 @@
 #define  NEXT_CHAR now_char=next_char;next_char=getchar()
 static char next_char=' ',now_char=' ';
 
-static std::unordered_map<int,int> f;
-int hash(const char *);
-std::unordered_map<int,int>level;
+static std::unordered_map<long,int> f;
+long hash(const char *);
+std::unordered_map<long,int>level;
 char str[MAXSIZE];
 int num;
 
@@ -70,8 +70,8 @@ int gettype(const char *str){
         return _LONG;
     }
 }
-int hash(const char *str){//hash一个字符串
-    int res=0;
+long hash(const char *str){//hash一个字符串
+    long res=0;
     int len=strlen(str);
     for(int i=0;i<len;i++){
         res=res*10007+str[i];

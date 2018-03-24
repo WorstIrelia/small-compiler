@@ -97,7 +97,8 @@ void while_expr();
 void for_expr();
 void code_block();
 
-
+int array_num_analy(int ,std::vector<int>&);
+int array_analy(int );
 
 
 

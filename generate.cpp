@@ -12,11 +12,13 @@
 int tmp_cnt=1;
 
 extern std::vector<std::string> add_del[100][100];
+extern std::vector<std::string> add_array_del[100][100];
 extern std::unordered_map<int,std::vector<identifier_elem>> symbol_list;
 extern std::unordered_map<std::string,function_elem> function_list;
+extern std::unordered_map<std::string,std::vector<array_elem>> array_list;
 extern std::unordered_map<std::string,int>map;
 extern FILE *out;
-extern std::unordered_map<int,int>level;
+extern std::unordered_map<long,int>level;
 
 
 std::stack<int>function_return_mark;
@@ -76,12 +78,20 @@ void gene_two_op(const char *lname,const char *rname,const char *op,const char *
 }
 
 void gene_del(int function,int domain){
+    //printf("im in del\n");
     int i=(int)add_del[function][domain].size();
     i--;
     for(;i>=0;i--){
         symbol_list[map[add_del[function][domain][i]]].pop_back();
     }
     add_del[function][domain].clear();
+    //printf("del ok1\n");
+    i=(int )add_array_del[function][domain].size();
+    i--;
+    for(;i>=0;i--){
+        array_list[add_array_del[function][domain][i]].pop_back();
+    }
+    add_array_del[function][domain].clear();
 
 }
 
@@ -89,6 +99,9 @@ void mark_add(const char *str,int function,int domain){
     std::string tmp=str;
     add_del[function][domain].push_back(tmp);
 
+}
+void mark_array_add(const char *str,int function,int domain){
+    add_array_del[function][domain].push_back(str);
 }
 
 void gene_add(const char *str){
@@ -289,8 +302,62 @@ void gene_call_end(const char *str,const char *ret){
     instruction_cnt++;
 }
 
-
-
+void gene_add_array(const char *str,long siz){
+    char *p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"addar %s\n",str);
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"+ sp %ld sp\n",siz*8);
+    instruction.push_back(p);
+    instruction_cnt++;
+}
+void gene_offset(const char *str,const char *dest){
+    std::vector<long>v;
+    v.push_back(1);
+    long tmp=1;
+    std::vector<int>& tmpv=array_list[str].back().dimen;
+    int offset=array_list[str].back().dimension;
+    int l=(int)tmpv.size()-1;
+    for(int i=l;i>=1;i--){
+        tmp*=tmpv[i];
+        v.push_back(tmp);
+    }
+    char *p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= %%0 0\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+    while(offset){
+        p=(char *)malloc(INSTRUCTION_SIZE);
+        sprintf(p,"* (sp-%d) %ld (sp-%d) %%0\n",offset*8,v[offset-1],offset*8);
+        instruction.push_back(p);
+        instruction_cnt++;
+        p=(char *)malloc(INSTRUCTION_SIZE);
+        sprintf(p,"+ %%0 (sp-%d) %%0\n",offset*8);
+        instruction.push_back(p);
+        instruction_cnt++;
+        offset--;
+    }
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= %s %%0\n",dest);
+    instruction.push_back(p);
+    instruction_cnt++;
+    offset=array_list[str].back().dimension;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"- sp %d sp\n",offset*8);
+    instruction.push_back(p);
+    instruction_cnt++;
+}
+void gene_set_offset(const char *str){
+    char *p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= (sp) %s\n",str);
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"push\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+}
 
 void generate_all(){
     scan();
@@ -389,8 +456,8 @@ void scan(){
 }
 void return_test(){
     char tmp[128];
-    sscanf(instruction[instruction_cnt-1]+2,"%s",tmp);
-    if(strcmp(tmp,"pc")){
-        error("you may forget return?");
+    sscanf(instruction[instruction_cnt-1],"%s",tmp);
+    if(strcmp(tmp,"ret")){
+        error("you may forget return..");
     }
 }

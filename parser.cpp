@@ -15,7 +15,7 @@ extern int num;
 extern char str[];
 extern int domain_cnt;
 extern int function_cnt;
-extern std::unordered_map<int,int> level;
+extern std::unordered_map<long,int> level;
 extern std::stack<loop *>loop_stack;
 extern std::stack<_if *>if_stack;
 static int isloop=0;
@@ -739,6 +739,7 @@ void _L_(){
 }
 
 void _M(){//分析是函数还是变量
+    //printf("testddd %s\n",str);
     if(!strcmp(str,"(")){
         NEXT;
 
@@ -768,6 +769,7 @@ void _M(){//分析是函数还是变量
         current->retname=(char *)malloc(128);
         strcpy(current->retname,str);
         iden_or_func();
+        //printf("im out M\n");
     }
 }
 
@@ -875,7 +877,7 @@ void function(){
                         add_function(name,type,argument_list_v,1,is_use(name),entry);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
                         NEXT;
                         code_block();
-                        //return_test();//有问题
+                        return_test();//有问题
 
                         if (mark == RBIGBRACKET) {
                             gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
@@ -910,9 +912,11 @@ void sentence(){
         statement();
     }
     else if(mark==IDENTIFIER||mark==LSMLBREAKET){
-        //printf("im in aaaaaaaaaa\n");
+
         expr();
+        //printf("im in aaaaaaaaaa\n");
         delete_tmp();
+
     }
 }
 void equal(int type,const char *tmpstr){
@@ -951,18 +955,45 @@ void statement(){
         if(mark==IDENTIFIER){
             char tmpstr[128];
             strcpy(tmpstr,str);
-            add_identifer(str,type,function_cnt,domain_cnt);
-            gene_add(str);
             NEXT;
-            equal(type,tmpstr);//类型匹配
-            X(type);
+            if(mark==LMIDBRACKET){
+                if(in_array_list(tmpstr,function_cnt,domain_cnt)) error("defined %s ",tmpstr);//判断这个域内有没有
+                std::vector<int> n;
+                int dimension=array_num_analy(1,n);
+                add_array(tmpstr,type,function_cnt,domain_cnt,dimension,n);
+                long siz=1;
+                for(int i=0;i<n.size();i++){
+                    siz*=n[i];
+                }
+                gene_add_array(tmpstr,siz);
+            }
+            else{
+                add_identifer(tmpstr,type,function_cnt,domain_cnt);
+                gene_add(tmpstr);
+                equal(type,tmpstr);//类型匹配
+                X(type);
+            }
+
         }
         else error("in statement,expect identifier\n");
     }
     else error("in statement,expect type\n");
     delete_tmp();
 }
+int array_num_analy(int step,std::vector<int>&tmpn){
+    NEXT;
+    auto p=expr();
+    if(p->rettype!=NUM) error("array's index is not num");
+    tmpn.push_back(num);
+    if(mark==RMIDBRACKET) NEXT;
+    else error("expect ]");
+    if(mark==LMIDBRACKET) {
 
+        return array_num_analy(step+1,tmpn);
+    }
+    else return step;
+
+}
 
 
 
@@ -1006,11 +1037,12 @@ void func(const char *function_name){
 }
 
 void iden_or_func(){
+    //printf("%s\n",str);
     if(mark==IDENTIFIER){
         NEXT;
         if(mark==LSMLBREAKET){
             if(!in_function_list(current->retname)) {
-                printf("%s ",current->retname);
+                //printf("%s ",current->retname);
                 error("not statement");
             }
             char *function_name=(char *)malloc(128);
@@ -1027,19 +1059,62 @@ void iden_or_func(){
             free(function_name);
             return ;
         }
-        else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA) {
+        else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA||mark==RMIDBRACKET) {
 
             if(!in_symbol_list(current->retname,function_cnt,domain_cnt)) {
-                printf("%s ",current->retname);
-                error("not define");
+                error("%s not define",current->retname);
             }
             current->rettype=get_identifer_type(current->retname);
             return ;//默认是标识符
         }
+        else if(mark==LMIDBRACKET){
+            //printf("im judge array\n");
+            if(!is_in_array_list(current->retname,function_cnt,domain_cnt)) error("do not have this %s array",current->retname);//判断小于等于这个域内的有没有
+            char *array_name=(char *)malloc(128);
+            strcpy(array_name,current->retname);
+            int dimen=array_analy(1);
+            //printf("im out\n");
+            if(dimen!=get_array_dimen(array_name)) error("%s array's dimension is not same",current->retname);
+            //printf("im out\n");
+            current->rettype=get_array_type(array_name);
+            char *p=next_tmp();
+            char *ret=(char *)malloc(128);
+
+            sprintf(ret,"(%s+%s)",array_name,p);
+            gene_offset(array_name,p);
+            free(array_name);
+            current->retname=ret;//+偏移量
+            return;
+
+
+            //current->retname+=jisuan();
+            //for()
+            //GET(sp-dimen*8) 字节
+            //dimen--;
+            //for() pop
+
+        }
         else error("in iden_or_func");
     }
     else error("in iden_or_func");
-}//生成call函数代码
+}// add array
+
+int array_analy(int step){
+    //printf("im in array_analy\n");
+    NEXT;
+    //printf("test %s\n",str);
+    auto p=expr();
+    //printf("okkk \n");
+    gene_set_offset(p->retname);
+    //= (sp) %num
+    //push
+    if(mark==RMIDBRACKET) NEXT;
+    else error("expect ]");
+    if(mark==LMIDBRACKET) {
+        return array_analy(step+1);
+    }
+    else return step;
+}
 void if_expr(_if *tmp){
     domain_cnt++;
     if(!strcmp(str,"if")){
@@ -1115,7 +1190,7 @@ void ret(){
     if(!strcmp(str,"return")){
         NEXT;
         int type=get_function_type(func_name);
-        if(mark==IDENTIFIER||mark==NUM){
+        if(mark==IDENTIFIER||mark==NUM||mark==LSMLBREAKET){
             auto p=expr();
             if(p->rettype!=type){
                 if((type==_INT||type==_LONG)&&p->rettype==NUM);//modify
@@ -1249,6 +1324,7 @@ void code_block(){
     //printf("im in\n");
     if(mark==TYPE||mark==IDENTIFIER||mark==SEMICOLON||mark==LSMLBREAKET){
         sentence();
+        //printf("im here\n");
         if(mark==SEMICOLON){
             NEXT;
             code_block();
@@ -1302,6 +1378,7 @@ void code_block(){
         code_block();
         gene_del(function_cnt,domain_cnt);
         domain_cnt--;
+        //printf("that\n");
         if(mark==RBIGBRACKET){
             NEXT;
             code_block();

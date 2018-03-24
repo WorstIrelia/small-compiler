@@ -25,7 +25,7 @@
 #define WHILE 17
 #define FOR 18
 int get_next_token();
-int hash(const char *);
+long hash(const char *);
 void init();
 int gettype(const char *str);
 #endif //COMPILER_SCANNER_H

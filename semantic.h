@@ -74,10 +74,18 @@ struct identifier_elem {
     int type;
     int function;
     int domain;
-
     identifier_elem(int type, int function, int domain) : type(type), function(function), domain(domain) {};
 };
 
+struct array_elem{
+    int type;
+    int function;
+    int domain;
+    int dimension;
+    std::vector<int>dimen;
+    array_elem(int type,int function,int domain,int dimension,std::vector<int>& dimen)
+            :type(type),function(function),domain(domain),dimension(dimension),dimen(dimen){};
+};
 
 
 void add_identifer(const char *str,int type,int function,int domain);//封装了增加一个变量 包括出错处理和添加和生成代码
@@ -97,4 +105,10 @@ bool function_argument_judge(const char *str,std::vector<int>&v);//函数调用�
 void node_init(expr_node*father,expr_node*son);
 bool type_judge(int ltype,int rtype,const char *op);
 bool is_use(const char *str);
+
+bool in_array_list(const char *,int ,int);
+bool is_in_array_list(const char *,int,int);
+int get_array_dimen(const char *);
+void add_array(const char *,int,int,int,int,std::vector<int>&n);
+int get_array_type(const char *);
 #endif //COMPILER_SEMANTIC_H

@@ -1,11 +1,8 @@
-int fib(int x){
-    if(2>x) {
-        return 1;
+long main(){
+    long a[10];
+    a[0]=1;
+    for(long i=1;i<10;i+=1) {
+        a[i]=a[i-1]*i;
     }
-    return fib(x-1)+fib(x-2);
-
-}
-int main(){
-    int ans=fib(2);
-    return ans;
+    return a[9];
 }
