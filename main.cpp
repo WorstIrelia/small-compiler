@@ -6,7 +6,7 @@ FILE *out;
 
 int main() {
 
-    out=fopen("/home/jason/Program/mybg/out.txt","w");
+    out=fopen("out.txt","w");
     freopen("in.txt","r",stdin);
 
     init();
