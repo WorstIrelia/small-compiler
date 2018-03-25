@@ -24,6 +24,7 @@
 #define _LONG 16
 #define WHILE 17
 #define FOR 18
+#define _VOID 19
 int get_next_token();
 long hash(const char *);
 void init();

@@ -76,14 +76,14 @@ void _M();//node
 void parser();
 void S();//begin
 void C();
-void function();//function statement or defination
+void function(int);//function statement or defination
 void argument_list(std::vector<int>&);//
 void _argument_list(std::vector<int>&);
 
 
 void sentence();
 void X(int );
-void statement();
+void statement(int ,char *);
 void equal(int ,const char *);
 
 void iden_or_func();

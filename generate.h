@@ -63,6 +63,7 @@ void gene_offset(const char *,const char *);
 void gene_set_offset(const char *);
 void gene_start();
 void gene_return(const char *str);
+void gene_prework();
 void del(int num);
 void scan();
 
