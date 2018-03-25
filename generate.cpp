@@ -1,6 +1,8 @@
 //
 // Created by jason on 3/17/18.
 //
+
+//添加一个全局数据区的数据产生 第一句 bp=sp开始产生
 #include <cstdio>
 #include <cstring>
 #include <algorithm>
@@ -19,12 +21,15 @@ extern std::unordered_map<std::string,std::vector<array_elem>> array_list;
 extern std::unordered_map<std::string,int>map;
 extern FILE *out;
 extern std::unordered_map<long,int>level;
-
+extern int function_cnt;
 
 std::stack<int>function_return_mark;
 std::vector<char *>instruction;
 std::stack<loop*> loop_stack;
 std::stack<_if*> if_stack;
+std::vector<char *>pre_work;
+
+
 
 int instruction_cnt=0;
 
@@ -73,8 +78,14 @@ void gene_two_op(const char *lname,const char *rname,const char *op,const char *
         sprintf(p,"%s %s %s\n",op,lname,rname);
     }
     else sprintf(p,"%s %s %s %s\n",op,lname,rname,tmpname);
-    instruction.push_back(p);
-    instruction_cnt++;
+    if(!function_cnt){
+        pre_work.push_back(p);
+    }
+    else{
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
+
 }
 
 void gene_del(int function,int domain){
@@ -107,12 +118,24 @@ void mark_array_add(const char *str,int function,int domain){
 void gene_add(const char *str){
     char *p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"add %s\n",str);
-    instruction.push_back(p);
-    instruction_cnt++;
+    if(!function_cnt){
+        pre_work.push_back(p);
+    }
+    else{
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
+
     p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"push\n");
-    instruction.push_back(p);
-    instruction_cnt++;
+    if(!function_cnt){
+        pre_work.push_back(p);
+    }
+    else{
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
+
 }
 void gene_head_while(const char *str,_while *tmp){
     char *p=(char *)malloc(INSTRUCTION_SIZE);
@@ -305,12 +328,24 @@ void gene_call_end(const char *str,const char *ret){
 void gene_add_array(const char *str,long siz){
     char *p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"addar %s\n",str);
-    instruction.push_back(p);
-    instruction_cnt++;
+    if(!function_cnt){
+        pre_work.push_back(p);
+    }
+    else{
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
+
     p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"+ sp %ld sp\n",siz*8);
-    instruction.push_back(p);
-    instruction_cnt++;
+    if(!function_cnt){
+        pre_work.push_back(p);
+    }
+    else{
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
+
 }
 void gene_offset(const char *str,const char *dest){
     std::vector<long>v;
@@ -392,11 +427,13 @@ void gene_real_argument(const char *str){
     instruction_cnt++;
 }
 void gene_return(const char *str){
-    char *p=(char *)malloc(INSTRUCTION_SIZE);
-    if(str) sprintf(p,"= %%a %s\n",str);
-    else p=NULL;
-    instruction.push_back(p);
-    instruction_cnt++;
+    char *p;
+    if(str) {
+        p=(char *)malloc(INSTRUCTION_SIZE);
+        sprintf(p,"= %%a %s\n",str);
+        instruction.push_back(p);
+        instruction_cnt++;
+    }
     p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"= sp bp\n");
     instruction.push_back(p);
@@ -418,6 +455,10 @@ void gene_start(){
     instruction.push_back(p);
     instruction_cnt++;
     p=(char *)malloc(INSTRUCTION_SIZE);
+    sprintf(p,"= bp sp\n");
+    instruction.push_back(p);
+    instruction_cnt++;
+    p=(char *)malloc(INSTRUCTION_SIZE);
     sprintf(p,"+ sp 16 sp\n");
     instruction.push_back(p);
     instruction_cnt++;
@@ -429,6 +470,11 @@ void gene_start(){
     sprintf(p,"call main\n");
     instruction.push_back(p);
     instruction_cnt++;
+}
+void gene_prework(){
+    for(int i=0;i<pre_work.size();i++){
+        fprintf(out,"# %s",pre_work[i]);
+    }
 }
 void del(int num){
     for(int i=0;i<num;i++){

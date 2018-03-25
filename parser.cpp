@@ -765,16 +765,20 @@ void _M(){//分析是函数还是变量
 
         NEXT;
     }
-    else {
+    else if(mark==IDENTIFIER){
+
         current->retname=(char *)malloc(128);
         strcpy(current->retname,str);
+        NEXT;
         iden_or_func();
         //printf("im out M\n");
     }
 }
 
 
-
+//S->type identifier func C| type identifier EQU X; C
+//func->
+//C->S
 
 
 
@@ -788,7 +792,28 @@ void parser(){
 }
 void S(){
     if(mark==TYPE){
-        function();
+        int type=gettype(str);
+        NEXT;
+        if(mark==IDENTIFIER){
+            char name[128];
+            strcpy(name,str);
+            func_name=name;
+            NEXT;
+            if(mark==LSMLBREAKET){
+                function(type);
+            }
+            else{
+                int tmp=function_cnt;
+                function_cnt=0;
+                statement(type,func_name);
+                function_cnt=tmp;
+                if(mark==SEMICOLON){
+                    NEXT;
+                }
+                else error("expect ;");
+            }
+        }
+
         C();
     }
     else{
@@ -847,69 +872,64 @@ void argument_list(std::vector<int> &argument_list_v){
     else if(mark==RSMLBREAKET) return;
     else error("in arguement_list,expect type or )\n");
 }
-void function(){
-    int type;
-    char name[128];
-    func_name=name;
+void function(int type){
+    //printf("ddddddddddddd %s\n",func_name);
     int entry=instruction_cnt;
-    if(mark==TYPE){
-        type=gettype(str);
+    NEXT;
+    function_cnt++;
+    domain_cnt=0;
+    std::vector<int>argument_list_v;
+    argument_list_v.clear();
+    argument_list(argument_list_v);//得到参数信息
+    if (mark == RSMLBREAKET) {
         NEXT;
-        if(mark==IDENTIFIER) {
-            strcpy(name,str);
-            NEXT;
-            if (mark == LSMLBREAKET) {
-                NEXT;
-                function_cnt++;
-                domain_cnt=0;
-                std::vector<int>argument_list_v;
-                argument_list_v.clear();
-                argument_list(argument_list_v);//得到参数信息
-                if (mark == RSMLBREAKET) {
-                    NEXT;
-                    if (mark == LBIGBRACKET) {//定义函数
-                        if(in_function_list(name)){//如果声明过 要求参数相等 而且没定义
-                            if(!function_judge(name,argument_list_v)) {
+        if (mark == LBIGBRACKET) {//定义函数
+            //printf("??? %s\n",str);
+            if(in_function_list(func_name)){//如果声明过 要求参数相等 而且没定义
+                if(!function_judge(func_name,argument_list_v)) {
 
-                                error("error in funciont %s\n",name);
-                            }
-                        }
-                        add_function(name,type,argument_list_v,1,is_use(name),entry);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
-                        NEXT;
-                        code_block();
-                        return_test();//有问题
-
-                        if (mark == RBIGBRACKET) {
-                            gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
-                            NEXT;
-                            return;
-                        }
-                        else error("in function,expect }\n");
-                    }
-                    else if(mark==SEMICOLON){//这只是个函数声明
-                        if(in_function_list(name)){
-                            //printf("function %s ",name);
-                            error("fucntion is redefine %s\n",name);
-                        }
-                        del(argument_list_v.size()*3);
-                        add_function(name,type,argument_list_v,0,0,0);
-                        NEXT;
-                    }
-                    else error("in function,expect {\n");
+                    error("error in funciont %s\n",func_name);
                 }
-                else error("in function,expect )\n");
             }
-            else error("in function,expect (\n");
+            add_function(func_name,type,argument_list_v,1,is_use(func_name),entry);//增加函数表 接下来就是要生成代码 所以对函数体和域进行操作
+            NEXT;
+            //printf("??? %s\n",str);
+            code_block();
+            return_test();//有问题
+
+            if (mark == RBIGBRACKET) {
+                gene_del(function_cnt,domain_cnt);//在变量表里删除这个域内的所以变量
+                NEXT;
+                return;
+            }
+            else error("in function,expect }\n");
         }
-        else error("in function,expect identifier\n");
+        else if(mark==SEMICOLON){//这只是个函数声明
+            if(in_function_list(func_name)){
+                //printf("function %s ",name);
+                error("fucntion is redefine %s\n",func_name);
+            }
+            del((int)argument_list_v.size()*3);
+            add_function(func_name,type,argument_list_v,0,0,0);
+            NEXT;
+        }
+        else error("in function,expect {\n");
     }
-    else error("in function,expect type\n");
+    else error("in function,expect )\n");
+
 }
 
 
 void sentence(){
     if(mark==TYPE){
-        statement();
+        int type=gettype(str);
+        NEXT;
+        if(mark==IDENTIFIER){
+            char tmpstr[128];
+            strcpy(tmpstr,str);
+            NEXT;
+            statement(type,tmpstr);
+        }
     }
     else if(mark==IDENTIFIER||mark==LSMLBREAKET){
 
@@ -935,26 +955,6 @@ void X(int type){
         if(mark==IDENTIFIER){
             char tmpstr[128];
             strcpy(tmpstr,str);
-            add_identifer(str,type,function_cnt,domain_cnt);
-            gene_add(str);
-            NEXT;
-            equal(type,tmpstr);//类型匹配
-            X(type);
-        }
-        else error("in X,expect identifier\n");
-    }
-    else if(mark==SEMICOLON) return;
-    else error("in X,expect , or ;\n");
-}
-
-void statement(){
-    int type;
-    if(mark==TYPE){
-        type=gettype(str);//获取变量类型
-        NEXT;
-        if(mark==IDENTIFIER){
-            char tmpstr[128];
-            strcpy(tmpstr,str);
             NEXT;
             if(mark==LMIDBRACKET){
                 if(in_array_list(tmpstr,function_cnt,domain_cnt)) error("defined %s ",tmpstr);//判断这个域内有没有
@@ -975,10 +975,33 @@ void statement(){
             }
 
         }
-        else error("in statement,expect identifier\n");
+        else error("in X,expect identifier\n");
     }
-    else error("in statement,expect type\n");
-    delete_tmp();
+    else if(mark==SEMICOLON) return;
+    else error("in X,expect , or ;\n");
+}
+
+void statement(int type,char *tmpstr){//modify
+    if(type==_VOID) error("identifier can't be void");
+    if(mark==LMIDBRACKET){
+        if(in_array_list(tmpstr,function_cnt,domain_cnt)) error("defined %s ",tmpstr);//判断这个域内有没有
+        std::vector<int> n;
+        int dimension=array_num_analy(1,n);
+        add_array(tmpstr,type,function_cnt,domain_cnt,dimension,n);
+        long siz=1;
+        for(int i=0;i<n.size();i++){
+            siz*=n[i];
+        }
+        gene_add_array(tmpstr,siz);//modify
+        X(type);
+    }
+    else{
+        add_identifer(tmpstr,type,function_cnt,domain_cnt);
+        gene_add(tmpstr);//modify
+        equal(type,tmpstr);//类型匹配
+        X(type);
+    }
+    //delete_tmp();
 }
 int array_num_analy(int step,std::vector<int>&tmpn){
     NEXT;
@@ -1038,63 +1061,59 @@ void func(const char *function_name){
 
 void iden_or_func(){
     //printf("%s\n",str);
-    if(mark==IDENTIFIER){
-        NEXT;
-        if(mark==LSMLBREAKET){
-            if(!in_function_list(current->retname)) {
-                //printf("%s ",current->retname);
-                error("not statement");
-            }
-            char *function_name=(char *)malloc(128);
-            strcpy(function_name,current->retname);
-            gene_call_begin();
-            func(function_name);
-
-            current->rettype=get_function_type(function_name);//函数的返回值类型 修改
-            char *p=next_tmp();
-            gene_call_end(function_name,p);
-
-            //gene_function(function_name,p);
-            current->retname=p;
-            free(function_name);
-            return ;
+    if(mark==LSMLBREAKET){
+        if(!in_function_list(current->retname)) {
+            //printf("%s ",current->retname);
+            error("not statement");
         }
-        else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA||mark==RMIDBRACKET) {
+        char *function_name=(char *)malloc(128);
+        strcpy(function_name,current->retname);
+        gene_call_begin();
+        func(function_name);
 
-            if(!in_symbol_list(current->retname,function_cnt,domain_cnt)) {
-                error("%s not define",current->retname);
-            }
-            current->rettype=get_identifer_type(current->retname);
-            return ;//默认是标识符
+        current->rettype=get_function_type(function_name);//函数的返回值类型 修改
+        char *p=next_tmp();
+        gene_call_end(function_name,p);
+
+        //gene_function(function_name,p);
+        current->retname=p;
+        free(function_name);
+        return ;
+    }
+    else if(mark==OPERATOR||mark==RSMLBREAKET||mark==SEMICOLON||mark==COMMA||mark==RMIDBRACKET) {
+
+        if(!in_symbol_list(current->retname,function_cnt,domain_cnt)) {
+            error("%s not define",current->retname);
         }
-        else if(mark==LMIDBRACKET){
-            //printf("im judge array\n");
-            if(!is_in_array_list(current->retname,function_cnt,domain_cnt)) error("do not have this %s array",current->retname);//判断小于等于这个域内的有没有
-            char *array_name=(char *)malloc(128);
-            strcpy(array_name,current->retname);
-            int dimen=array_analy(1);
-            //printf("im out\n");
-            if(dimen!=get_array_dimen(array_name)) error("%s array's dimension is not same",current->retname);
-            //printf("im out\n");
-            current->rettype=get_array_type(array_name);
-            char *p=next_tmp();
-            char *ret=(char *)malloc(128);
+        current->rettype=get_identifer_type(current->retname);
+        return ;//默认是标识符
+    }
+    else if(mark==LMIDBRACKET){
+        //printf("im judge array\n");
+        if(!is_in_array_list(current->retname,function_cnt,domain_cnt)) error("do not have this %s array",current->retname);//判断小于等于这个域内的有没有
+        char *array_name=(char *)malloc(128);
+        strcpy(array_name,current->retname);
+        int dimen=array_analy(1);
+        //printf("im out\n");
+        if(dimen!=get_array_dimen(array_name)) error("%s array's dimension is not same",current->retname);
+        //printf("im out\n");
+        current->rettype=get_array_type(array_name);
+        char *p=next_tmp();
+        char *ret=(char *)malloc(128);
 
-            sprintf(ret,"(%s+%s)",array_name,p);
-            gene_offset(array_name,p);
-            free(array_name);
-            current->retname=ret;//+偏移量
-            return;
+        sprintf(ret,"(%s+%s)",array_name,p);
+        gene_offset(array_name,p);
+        free(array_name);
+        current->retname=ret;//+偏移量
+        return;
 
 
-            //current->retname+=jisuan();
-            //for()
-            //GET(sp-dimen*8) 字节
-            //dimen--;
-            //for() pop
+        //current->retname+=jisuan();
+        //for()
+        //GET(sp-dimen*8) 字节
+        //dimen--;
+        //for() pop
 
-        }
-        else error("in iden_or_func");
     }
     else error("in iden_or_func");
 }// add array
@@ -1193,7 +1212,10 @@ void ret(){
         if(mark==IDENTIFIER||mark==NUM||mark==LSMLBREAKET){
             auto p=expr();
             if(p->rettype!=type){
-                if((type==_INT||type==_LONG)&&p->rettype==NUM);//modify
+               // printf("sdfsd %d %d\n",p->rettype,type);
+                if((type==_INT||type==_LONG)&&p->rettype==NUM){
+                    //printf("????\n");
+                }
                 else error("return type not same in %s\n",func_name);
             }
             gene_return(p->retname);
@@ -1201,8 +1223,9 @@ void ret(){
         }
         else if(mark==SEMICOLON)
         {
-            if(type==_INT||type==_LONG) {// modify
-                error("no return type in %s\n",func_name);
+            if(type!=_VOID) {// modify
+
+                error("return type is void in %s\n",func_name);
             }
             gene_return(NULL);
         }
@@ -1244,7 +1267,7 @@ void for_expr(){
                                         gene_tail_for(tmp);
                                         delete tmp;
                                         loop_stack.pop();
-
+                                        gene_del(function_cnt,domain_cnt);
                                         domain_cnt--;
 
                                         NEXT;

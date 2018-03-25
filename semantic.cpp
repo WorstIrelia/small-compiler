@@ -30,6 +30,7 @@ bool is_use(const char *str){
 
 
 void add_identifer(const char *str,int type,int function_cnt,int domain_cnt){
+    printf("%s %d %d \n",str,function_cnt,domain_cnt);
     if(redefine(str,function_cnt,domain_cnt)) error("redefined");//如果没有重定义
     //printf("%s %d %d %d identifier add\n",str,type,function_cnt,domain_cnt);
     add(str,type,function_cnt,domain_cnt);//添加
@@ -44,7 +45,7 @@ bool in_symbol_list(const char *str,int function,int domain){
     }
     std::vector<identifier_elem> &tmp=symbol_list[map[key]];
     if(tmp.size()){
-        if(tmp[tmp.size()-1].function==function&&tmp[tmp.size()-1].domain<=domain) return true;
+        if(tmp[tmp.size()-1].function==function&&tmp[tmp.size()-1].domain<=domain||tmp[tmp.size()-1].function==0) return true;
         return  false;
     }
     return false;
@@ -139,7 +140,7 @@ bool is_in_array_list(const char *str,int function_cnt,int domain_cnt){
     if(!array_list.count(str)) return false;
     array_elem &tmp=array_list[str].back();
     //printf("array_size %d\n",array_list[str].size());
-    if(function_cnt==tmp.function&&domain_cnt>=tmp.domain) return true;
+    if(function_cnt==tmp.function&&domain_cnt>=tmp.domain||tmp.function==0) return true;
     return false;
 }
 int get_array_dimen(const char *str){

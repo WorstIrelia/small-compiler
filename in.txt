@@ -1,8 +1,38 @@
-long main(){
-    long a[10];
-    a[0]=1;
-    for(long i=1;i<10;i+=1) {
-        a[i]=a[i-1]*i;
+int a[100];
+void sort(int l,int r){
+	if(l>=r){
+		return ;
+	}
+	int i=l;
+	int j=r;
+	int key=a[l];
+	//this is test;
+	//ok
+	while(i<j){
+		while(i<j&&key<=a[j]) {
+			j-=1;
+		}
+		a[i]=a[j];
+		while(i<j&&key>=a[i]) {
+			i+=1;
+		}
+		a[j]=a[i];
+	}
+	a[i]=key;
+	//strange
+	//nice
+	/*sdfsdfa
+	*happy new year
+	*/
+	sort(l,i-1);
+	sort(i+1,r);
+	return ;
+}
+int main(){
+	a[0]=1;
+    for(int i=1;i<100;i+=1){
+		a[i]=a[i-1]*i%10007;
     }
-    return a[9];
+    sort(0,99);
+    return 0;
 }

@@ -21,6 +21,7 @@ int num;
 void init(){
     f[hash("int")]=TYPE;
     f[hash("long")]=TYPE;
+    f[hash("void")]=TYPE;
     f[hash("while")]=RESERVER;
     f[hash("for")]=RESERVER;
     f[hash("if")]=RESERVER;
@@ -69,6 +70,11 @@ int gettype(const char *str){
     else if(!strcmp(str,"long")){
         return _LONG;
     }
+    else if(!strcmp(str,"void")){
+        return _VOID;
+    }
+    error("no this type\n");
+    return -1;
 }
 long hash(const char *str){//hash一个字符串
     long res=0;
@@ -81,9 +87,36 @@ long hash(const char *str){//hash一个字符串
 int get_next_token(){//返回下一个词
     NEXT_CHAR;
 
-    while(now_char==' '||now_char=='\n'||now_char=='\n'){
-        NEXT_CHAR;
+
+    while(now_char=='/'&&next_char=='/'||now_char=='/'&&next_char=='*'||now_char==' '||now_char=='\n'||now_char=='\t'){
+        //printf("im in %c %c\n",now_char,next_char);
+        if(now_char==' '||now_char=='\n'||now_char=='\t'){
+            while(now_char==' '||now_char=='\n'||now_char=='\t') {
+                //printf("%c\n",now_char);
+                NEXT_CHAR;
+            }
+        }
+        else if(now_char=='/'&&next_char=='/'){
+
+            while(now_char!='\n') {
+                //printf("%c\n",now_char);
+                NEXT_CHAR;
+
+            }
+                //
+            //while(now_char)
+        }
+        else{
+            while(now_char!='*'||next_char!='/'){
+                NEXT_CHAR;
+            }
+            NEXT_CHAR;
+            NEXT_CHAR;
+        }
+        //printf("%c %c\n",now_char,next_char);
+
     }
+
     if(isdigit(now_char)){
         char *p=str;
         *p=now_char;
