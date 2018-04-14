@@ -17,6 +17,8 @@ long hash(const char *);
 std::unordered_map<long,int>level;
 char str[MAXSIZE];
 int num;
+int line_num=0;
+
 
 void init(){
     f[hash("int")]=TYPE;
@@ -93,6 +95,7 @@ int get_next_token(){//返回下一个词
         if(now_char==' '||now_char=='\n'||now_char=='\t'){
             while(now_char==' '||now_char=='\n'||now_char=='\t') {
                 //printf("%c\n",now_char);
+                if(now_char=='\n') line_num++;
                 NEXT_CHAR;
             }
         }

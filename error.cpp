@@ -5,6 +5,7 @@
 #include <cstdio>
 #include <cstdlib>
 #include <stdarg.h>
+extern int line_num;
 void error(const char *str,...){
     va_list ag;
     va_start(ag,str);
@@ -38,6 +39,7 @@ void error(const char *str,...){
         str++;
     }
     va_end(ag);
+    printf("%d\n",line_num);
     exit(-1);
 
 }

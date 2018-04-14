@@ -8,7 +8,7 @@ int main() {
 
     out=fopen("out.txt","w");
     freopen("in.txt","r",stdin);
-
+    freopen("text.txt","w",stdout);
     init();
     gene_start();
     parser();
